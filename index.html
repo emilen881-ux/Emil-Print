@@ -1387,33 +1387,7 @@ L=50м"></textarea>
             document.getElementById('v4').textContent = pt + 'мм';
         }
 
-        // ====== USB ПЕЧАТЬ TSPL С CP866 ======
-        
-        // Конвертация UTF-8 в CP866 (DOS Cyrillic)
-        function utf8ToCP866(str) {
-            const cp866Map = {
-                'А':0x80,'Б':0x81,'В':0x82,'Г':0x83,'Д':0x84,'Е':0x85,'Ж':0x86,'З':0x87,
-                'И':0x88,'Й':0x89,'К':0x8A,'Л':0x8B,'М':0x8C,'Н':0x8D,'О':0x8E,'П':0x8F,
-                'Р':0x90,'С':0x91,'Т':0x92,'У':0x93,'Ф':0x94,'Х':0x95,'Ц':0x96,'Ч':0x97,
-                'Ш':0x98,'Щ':0x99,'Ъ':0x9A,'Ы':0x9B,'Ь':0x9C,'Э':0x9D,'Ю':0x9E,'Я':0x9F,
-                'а':0xA0,'б':0xA1,'в':0xA2,'г':0xA3,'д':0xA4,'е':0xA5,'ж':0xA6,'з':0xA7,
-                'и':0xA8,'й':0xA9,'к':0xAA,'л':0xAB,'м':0xAC,'н':0xAD,'о':0xAE,'п':0xAF,
-                'р':0xE0,'с':0xE1,'т':0xE2,'у':0xE3,'ф':0xE4,'х':0xE5,'ц':0xE6,'ч':0xE7,
-                'ш':0xE8,'щ':0xE9,'ъ':0xEA,'ы':0xEB,'ь':0xEC,'э':0xED,'ю':0xEE,'я':0xEF,
-                'Ё':0xF0,'ё':0xF1
-            };
-            
-            const bytes = [];
-            for (let i = 0; i < str.length; i++) {
-                const char = str.charAt(i);
-                if (cp866Map[char]) {
-                    bytes.push(cp866Map[char]);
-                } else {
-                    bytes.push(str.charCodeAt(i));
-                }
-            }
-            return new Uint8Array(bytes);
-        }
+        // ====== USB ПЕЧАТЬ TSPL С TTF ШРИФТОМ ======
         
         async function connectUSB() {
             if (!navigator.usb) {
@@ -1478,50 +1452,49 @@ L=50м"></textarea>
             }
         }
         
-       function generateTSPL(label) {
-    let cmd = '';
-    
-    // Настройка для 40x30 мм
-    cmd += 'SIZE 40 mm, 30 mm\r\n';
-    cmd += 'GAP 2 mm, 0 mm\r\n';
-    cmd += 'DIRECTION 0\r\n';
-    cmd += 'REFERENCE 0,0\r\n';
-    cmd += 'COUNTRY 007\r\n';
-    cmd += 'CODEPAGE 866\r\n';
-    cmd += 'CLS\r\n';
-    
-    // Начальная позиция с отступом сверху
-    let y = 10;
-    const leftMargin = 10;  // Отступ слева
-    
-    // Первая строка (меньше размер, чтобы влезла)
-    if (label.line1) {
-        cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line1}"\r\n`;
-        y += 25;
-    }
-    
-    // Остальные строки (мелкий шрифт)
-    if (label.line2) {
-        cmd += `TEXT ${leftMargin},${y},"2",0,1,1,"${label.line2}"\r\n`;
-        y += 20;
-    }
-    if (label.line3) {
-        cmd += `TEXT ${leftMargin},${y},"2",0,1,1,"${label.line3}"\r\n`;
-        y += 20;
-    }
-    if (label.line4) {
-        cmd += `TEXT ${leftMargin},${y},"2",0,1,1,"${label.line4}"\r\n`;
-        y += 20;
-    }
-    if (label.line5) {
-        cmd += `TEXT ${leftMargin},${y},"2",0,1,1,"${label.line5}"\r\n`;
-    }
-    
-    cmd += 'PRINT 1,1\r\n';
-    
-    return cmd;
-}
-
+        function generateTSPL(label) {
+            let cmd = '';
+            
+            // Настройка для бирки 40x30мм
+            cmd += 'SIZE 40 mm, 30 mm\r\n';
+            cmd += 'GAP 2 mm, 0 mm\r\n';
+            cmd += 'DIRECTION 0\r\n';
+            cmd += 'REFERENCE 0,0\r\n';
+            cmd += 'OFFSET 0 mm\r\n';
+            cmd += 'SET TEAR ON\r\n';
+            cmd += 'CLS\r\n';
+            
+            // Координаты с хорошими отступами
+            let y = 5;
+            const leftMargin = 5;
+            
+            // Первая строка - крупнее
+            if (label.line1) {
+                cmd += `TEXT ${leftMargin},${y},"4",0,1,1,"${label.line1}"\r\n`;
+                y += 28;
+            }
+            
+            // Остальные строки - мельче
+            if (label.line2) {
+                cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line2}"\r\n`;
+                y += 23;
+            }
+            if (label.line3) {
+                cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line3}"\r\n`;
+                y += 23;
+            }
+            if (label.line4) {
+                cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line4}"\r\n`;
+                y += 23;
+            }
+            if (label.line5) {
+                cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line5}"\r\n`;
+            }
+            
+            cmd += 'PRINT 1,1\r\n';
+            
+            return cmd;
+        }
         
         async function printUSB() {
             if (!usbDevice) {
@@ -1543,12 +1516,14 @@ L=50м"></textarea>
                 const printerCmd = generateTSPL(label);
                 console.log('TSPL команда:', printerCmd);
                 
-                const data = utf8ToCP866(printerCmd);
-                console.log('Байты (CP866):', data);
+                // Отправляем как UTF-8
+                const encoder = new TextEncoder();
+                const data = encoder.encode(printerCmd);
+                console.log('Байты (UTF-8):', data);
                 
                 await usbDevice.transferOut(usbEndpoint, data);
                 
-                toast('⚡ Отправлено на принтер (TSPL/CP866)!', 'success');
+                toast('⚡ Отправлено на принтер!', 'success');
                 
             } catch (error) {
                 console.error('Ошибка печати:', error);
@@ -1576,7 +1551,8 @@ L=50м"></textarea>
                     allCommands += generateTSPL(label);
                 });
                 
-                const data = utf8ToCP866(allCommands);
+                const encoder = new TextEncoder();
+                const data = encoder.encode(allCommands);
                 await usbDevice.transferOut(usbEndpoint, data);
                 
                 toast(`⚡ Напечатано ${selectedIndices.size} бирок!`, 'success');
