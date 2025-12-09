@@ -1,1676 +1,288 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#667eea">
-    <title>Эмиль Бирки</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            padding: 12px 16px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
-        }
-        
-        .header h1 {
-            font-size: 20px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .stats {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
-        }
-        
-        .tabs {
-            display: flex;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            position: sticky;
-            top: 60px;
-            z-index: 99;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .tab {
-            flex: 1;
-            padding: 16px;
-            border: none;
-            background: none;
-            font-size: 14px;
-            font-weight: 700;
-            color: #9ca3af;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        .tab.active {
-            color: #667eea;
-            background: linear-gradient(to bottom, rgba(102,126,234,0.05), transparent);
-            border-bottom-color: #667eea;
-        }
-        
-        .content {
-            display: none;
-            padding: 16px;
-            padding-bottom: 100px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .content.active {
-            display: block;
-        }
-        
-        .search {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 14px;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        
-        .search input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid rgba(102,126,234,0.1);
-            border-radius: 12px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.7);
-        }
-        
-        .search input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
-            background: white;
-        }
-        
-        .grid {
-            display: grid;
-            gap: 12px;
-        }
-        
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            padding: 16px;
-            cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-            display: flex;
-            gap: 12px;
-            align-items: start;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-        
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(102,126,234,0.2);
-            border-color: #667eea;
-        }
-        
-        .card.selected {
-            border-color: #667eea;
-            box-shadow: 0 8px 30px rgba(102,126,234,0.3);
-            background: linear-gradient(to right, rgba(102,126,234,0.1), rgba(255,255,255,0.95));
-        }
-        
-        .card-checkbox {
-            width: 24px;
-            height: 24px;
-            min-width: 24px;
-            cursor: pointer;
-            margin-top: 2px;
-            accent-color: #667eea;
-        }
-        
-        .card-content {
-            flex: 1;
-        }
-        
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: #1f2937;
-        }
-        
-        .card-text {
-            font-size: 13px;
-            color: #6b7280;
-            line-height: 1.5;
-        }
-        
-        .section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        
-        .section-title {
-            font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 14px;
-            color: #1f2937;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-bottom: 12px;
-            color: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-        
-        .btn.primary { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .btn.success { background: linear-gradient(135deg, #10B981, #059669); }
-        .btn.info { background: linear-gradient(135deg, #3B82F6, #2563EB); }
-        .btn.danger { background: linear-gradient(135deg, #EF4444, #DC2626); }
-        .btn.secondary { background: rgba(243,244,246,0.95); color: #1F2937; }
-        .btn.cloud { background: linear-gradient(135deg, #8B5CF6, #7C3AED); }
-        .btn.warning { background: linear-gradient(135deg, #F59E0B, #D97706); }
-        .btn.print { background: linear-gradient(135deg, #6366F1, #4F46E5); }
-        .btn.usb { background: linear-gradient(135deg, #EC4899, #DB2777); }
-        
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn:active:not(:disabled) { transform: scale(0.96); }
-        .btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-        
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid rgba(102,126,234,0.2);
-            border-radius: 12px;
-            font-size: 15px;
-            margin-bottom: 12px;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.9);
-        }
-        
-        input[type="text"]:focus, textarea:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
-            background: white;
-        }
-        
-        input[type="file"] { display: none; }
-        textarea { 
-            min-height: 120px;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 13px;
-            resize: vertical;
-        }
-        
-        .preview {
-            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(246,147,251,0.05));
-            border: 3px dashed #667eea;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 200px;
-        }
-        
-        .label {
-            width: 40mm;
-            height: 30mm;
-            border: 3px solid #1f2937;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 1mm 2mm;
-            font-size: 10pt;
-            text-align: center;
-            line-height: 1.2;
-            background: white;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-        
-        .label:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 50px rgba(102,126,234,0.3);
-        }
-        
-        .controls {
-            background: linear-gradient(to bottom, rgba(249,250,251,0.95), rgba(243,244,246,0.95));
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.5);
-        }
-        
-        .control {
-            margin-bottom: 28px;
-        }
-        
-        .control:last-child {
-            margin-bottom: 0;
-        }
-        
-        .control-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #374151;
-        }
-        
-        .control-value {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 5px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
-        }
-        
-        .slider {
-            width: 100%;
-            height: 10px;
-            -webkit-appearance: none;
-            background: linear-gradient(to right, #667eea, #764ba2, #f093fb);
-            border-radius: 10px;
-            outline: none;
-        }
-        
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(102,126,234,0.5);
-            border: 3px solid white;
-            transition: all 0.3s ease;
-        }
-        
-        .slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-        
-        .slider::-moz-range-thumb {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid white;
-            box-shadow: 0 4px 15px rgba(102,126,234,0.5);
-            transition: all 0.3s ease;
-        }
-        
-        .slider::-moz-range-thumb:hover {
-            transform: scale(1.2);
-        }
-        
-        .toggle {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .toggle button {
-            flex: 1;
-            padding: 14px;
-            border: 2px solid rgba(102,126,234,0.2);
-            background: rgba(255,255,255,0.9);
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #6b7280;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .toggle button.active {
-            border-color: #667eea;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            box-shadow: 0 6px 20px rgba(102,126,234,0.4);
-            transform: scale(1.05);
-        }
-        
-        .hint {
-            font-size: 13px;
-            color: #6b7280;
-            line-height: 1.6;
-        }
-        
-        .empty {
-            text-align: center;
-            padding: 60px 20px;
-            color: white;
-            font-size: 16px;
-        }
-        
-        .empty-icon {
-            font-size: 60px;
-            margin-bottom: 16px;
-        }
-        
-        .toast {
-            position: fixed;
-            bottom: 90px;
-            left: 16px;
-            right: 16px;
-            background: rgba(31,41,55,0.95);
-            backdrop-filter: blur(20px);
-            color: white;
-            padding: 16px;
-            border-radius: 16px;
-            z-index: 1000;
-            font-weight: 600;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        
-        .toast.success { 
-            background: linear-gradient(135deg, rgba(16,185,129,0.95), rgba(5,150,105,0.95));
-        }
-        .toast.error { 
-            background: linear-gradient(135deg, rgba(239,68,68,0.95), rgba(220,38,38,0.95));
-        }
-        
-        .cloud-status {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #1f2937;
-            padding: 14px;
-            background: linear-gradient(135deg, rgba(219,234,254,0.8), rgba(191,219,254,0.8));
-            backdrop-filter: blur(10px);
-            border: 2px solid #3B82F6;
-            border-radius: 12px;
-            margin-bottom: 12px;
-        }
-
-        .cloud-status .icon { 
-            font-size: 20px;
-        }
-
-        .file-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-
-        .file-row .btn {
-            flex: 1;
-            margin-bottom: 0;
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, rgba(254,243,199,0.8), rgba(253,230,138,0.8));
-            backdrop-filter: blur(10px);
-            border: 2px solid #F59E0B;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 12px;
-            font-size: 13px;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .usb-info {
-            background: linear-gradient(135deg, rgba(254,215,226,0.8), rgba(252,165,165,0.8));
-            backdrop-filter: blur(10px);
-            border: 2px solid #EC4899;
-            border-radius: 12px;
-            padding: 14px;
-            margin-bottom: 12px;
-            font-size: 13px;
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
-        .usb-status {
-            padding: 14px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            font-weight: 700;
-            backdrop-filter: blur(10px);
-        }
-
-        .usb-status.connected {
-            background: linear-gradient(135deg, rgba(209,250,229,0.8), rgba(167,243,208,0.8));
-            color: #065F46;
-            border: 2px solid #10B981;
-        }
-
-        .usb-status.disconnected {
-            background: linear-gradient(135deg, rgba(254,226,226,0.8), rgba(254,202,202,0.8));
-            color: #991B1B;
-            border: 2px solid #EF4444;
-        }
-
-        .selection-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(30px);
-            padding: 14px 16px;
-            box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
-            display: none;
-            gap: 10px;
-            z-index: 101;
-            border-top: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .selection-bar.visible {
-            display: flex;
-        }
-
-        .selection-info {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 15px;
-        }
-
-        .selection-actions {
-            display: flex;
-            gap: 8px;
-        }
-
-        .selection-actions button {
-            padding: 12px 18px;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-
-        .selection-actions button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-
-        .selection-actions .btn-usb {
-            background: linear-gradient(135deg, #EC4899, #DB2777);
-            color: white;
-        }
-
-        .selection-actions .btn-pdf {
-            background: linear-gradient(135deg, #EF4444, #DC2626);
-            color: white;
-        }
-
-        .selection-actions .btn-png {
-            background: linear-gradient(135deg, #10B981, #059669);
-            color: white;
-        }
-
-        .selection-actions .btn-print {
-            background: linear-gradient(135deg, #6366F1, #4F46E5);
-            color: white;
-        }
-
-        .selection-actions .btn-clear {
-            background: rgba(243,244,246,0.95);
-            color: #1F2937;
-            min-width: 44px;
-        }
-        
-        @media print {
-            @page {
-                size: 40mm 30mm;
-                margin: 0;
-            }
-            
-            * {
-                margin: 0;
-                padding: 0;
-            }
-            
-            body {
-                margin: 0;
-                padding: 0;
-                background: white;
-            }
-            
-            body > *:not(#printArea) {
-                display: none !important;
-            }
-            
-            #printArea {
-                display: block !important;
-                margin: 0;
-                padding: 0;
-            }
-            
-            .print-label {
-                width: 40mm;
-                height: 30mm;
-                border: 2px solid #000;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                margin: 0;
-                padding: 0 2mm;
-                box-sizing: border-box;
-                page-break-after: always;
-                background: white;
-            }
-
-            .print-label:last-child {
-                page-break-after: avoid;
-            }
-        }
-        
-        #printArea { display: none; }
-    </style>
+  <meta charset="UTF-8">
+  <title>Эмиль Бирки — чистый TSPL</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:#e5e7eb;
+      margin:0;
+    }
+    .app{max-width:480px;margin:0 auto;padding:12px;}
+    h1{font-size:20px;margin:0 0 8px;}
+    .preview-wrap{
+      background:#f3f4f6;
+      border-radius:12px;
+      padding:16px;
+      margin-bottom:12px;
+      display:flex;
+      justify-content:center;
+    }
+    .label{
+      width:40mm;
+      height:30mm;
+      border:2px solid #111827;
+      background:white;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      text-align:center;
+      padding:1mm 2mm;
+      box-sizing:border-box;
+      font-size:10pt;
+      line-height:1.2;
+    }
+    .controls input[type="text"]{
+      width:100%;
+      padding:8px 10px;
+      margin-bottom:6px;
+      border-radius:8px;
+      border:1px solid #d1d5db;
+      font-size:14px;
+      box-sizing:border-box;
+    }
+    .btn{
+      width:100%;
+      padding:10px 14px;
+      border-radius:8px;
+      border:none;
+      font-weight:600;
+      font-size:14px;
+      cursor:pointer;
+      margin-bottom:6px;
+      color:white;
+    }
+    .btn-primary{background:#6366f1;}
+    .btn-usb{background:#ec4899;}
+    .btn-danger{background:#ef4444;}
+    .btn:disabled{opacity:.5;cursor:not-allowed;}
+    .row{display:flex;gap:6px;margin-bottom:6px;}
+    .row .btn{flex:1;margin-bottom:0;}
+    .status{
+      font-size:13px;
+      margin-bottom:8px;
+    }
+    #printArea{display:none;}
+    @media print{
+      @page{size:40mm 30mm;margin:0;}
+      body>*:not(#printArea){display:none!important;}
+      #printArea{display:block!important;}
+      .print-label{
+        width:40mm;
+        height:30mm;
+        border:2px solid #000;
+        box-sizing:border-box;
+        padding:0 2mm;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        text-align:center;
+        font-size:10pt;
+        line-height:1.2;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">
-            <div class="logo-icon">🏷️</div>
-            <h1>Эмиль Бирки</h1>
-        </div>
-        <div class="stats" id="stats">0</div>
+<div class="app">
+  <h1>Эмиль Бирки — TSPL</h1>
+
+  <div class="preview-wrap">
+    <div class="label" id="preview">
+      <div class="l1"></div>
+      <div class="l2"></div>
+      <div class="l3"></div>
+      <div class="l4"></div>
+      <div class="l5"></div>
     </div>
-    
-    <div class="tabs">
-        <button class="tab active" id="tabList">📋 Список</button>
-        <button class="tab" id="tabEditor">✏️ Редактор</button>
-        <button class="tab" id="tabManage">⚙️ Управление</button>
-    </div>
-    
-    <div class="content active" id="tab0">
-        <div class="search">
-            <input type="text" id="search" placeholder="🔍 Поиск бирок...">
-        </div>
-        <div id="grid" class="grid"></div>
-    </div>
-    
-    <div class="content" id="tab1">
-        <div class="section">
-            <div class="section-title">✏️ Текст бирки</div>
-            <div id="hint" class="hint">Выбери бирку из списка для редактирования</div>
-            <div id="editor" style="display:none">
-                <input type="text" id="l1" placeholder="Группа">
-                <input type="text" id="l2" placeholder="Описание">
-                <input type="text" id="l3" placeholder="Кабель">
-                <input type="text" id="l4" placeholder="От какого щита">
-                <input type="text" id="l5" placeholder="Длина">
-            </div>
-        </div>
-        
-        <div class="section">
-            <div class="section-title">👁️ Превью</div>
-            <div class="preview">
-                <div class="label" id="preview">
-                    <div class="line1"></div>
-                    <div class="line2"></div>
-                    <div class="line3"></div>
-                    <div class="line4"></div>
-                    <div class="line5"></div>
-                </div>
-            </div>
-            
-            <div class="controls">
-                <div class="control">
-                    <div class="control-label">
-                        <span>📝 Размер 1-й строки</span>
-                        <div class="control-value" id="v1">12pt</div>
-                    </div>
-                    <input type="range" class="slider" id="s1" min="8" max="18" value="12" step="0.5">
-                </div>
-                
-                <div class="control">
-                    <div class="control-label"><span>💪 Жирность 1-й строки</span></div>
-                    <div class="toggle" id="toggle1">
-                        <button data-weight="normal">Обычная</button>
-                        <button data-weight="bold" class="active">Жирная</button>
-                    </div>
-                </div>
-                
-                <div class="control">
-                    <div class="control-label">
-                        <span>📝 Размер остальных строк</span>
-                        <div class="control-value" id="v2">10pt</div>
-                    </div>
-                    <input type="range" class="slider" id="s2" min="7" max="16" value="10" step="0.5">
-                </div>
-                
-                <div class="control">
-                    <div class="control-label"><span>💪 Жирность остальных</span></div>
-                    <div class="toggle" id="toggle2">
-                        <button data-weight="normal" class="active">Обычная</button>
-                        <button data-weight="bold">Жирная</button>
-                    </div>
-                </div>
-                
-                <div class="control">
-                    <div class="control-label">
-                        <span>↕️ Интервал между строками</span>
-                        <div class="control-value" id="v3">1.2</div>
-                    </div>
-                    <input type="range" class="slider" id="s3" min="0.9" max="1.6" value="1.2" step="0.05">
-                </div>
-                
-                <div class="control">
-                    <div class="control-label">
-                        <span>⬇️ Отступ сверху</span>
-                        <div class="control-value" id="v4">0.5мм</div>
-                    </div>
-                    <input type="range" class="slider" id="s4" min="0" max="6" value="0.5" step="0.5">
-                </div>
-            </div>
-        </div>
-        
-        <div class="section">
-            <div class="section-title">🔌 USB печать (Xprinter XP-365B)</div>
-            
-            <div class="usb-info">
-                <strong>⚡ Прямая печать через USB!</strong><br>
-                Работает только в Chrome/Edge. Печатает бирку как картинку - русский текст будет читаемым!
-            </div>
-            
-            <div class="usb-status disconnected" id="usbStatus">
-                🔴 Принтер не подключен
-            </div>
-            
-            <button class="btn usb" id="usbConnectBtn">🔌 Подключить USB принтер</button>
-            <button class="btn usb" id="usbPrintBtn" disabled>⚡ Печать через USB (Картинка)</button>
-        </div>
+  </div>
 
-        <div class="section">
-            <div class="section-title">📄 Экспорт</div>
-            
-            <button class="btn success" id="pngBtn" disabled>🖼️ Скачать PNG</button>
-            <button class="btn danger" id="pdfBtn" disabled>📄 Скачать PDF</button>
-            <button class="btn print" id="printBtn" disabled>🖨️ Обычная печать</button>
-            <button class="btn primary" id="saveBtn" disabled>💾 Сохранить изменения</button>
-        </div>
-    </div>
-    
-    <div class="content" id="tab2">
-        <div class="section">
-            <div class="section-title">🔧 Исправления</div>
-            <div class="hint" style="margin-bottom: 12px;">
-                Убрать цифровые суффиксы из поля "От какого щита"<br>
-                Например: "от ЩР-П-1" → "от ЩР-П"
-            </div>
-            <button class="btn warning" id="fixBtn">🔧 Исправить все бирки</button>
-        </div>
+  <div class="controls">
+    <input id="l1" type="text" placeholder="Line 1 (Latin only)">
+    <input id="l2" type="text" placeholder="Line 2">
+    <input id="l3" type="text" placeholder="Line 3">
+    <input id="l4" type="text" placeholder="Line 4">
+    <input id="l5" type="text" placeholder="Line 5">
+  </div>
 
-        <div class="section">
-            <div class="section-title">💾 Локальное хранилище</div>
-            
-            <div class="cloud-status">
-                <span class="icon">📱</span>
-                <span id="localStatus">Загрузка...</span>
-            </div>
+  <div class="status" id="usbStatus">USB: not connected</div>
 
-            <input type="file" id="fileInput" accept=".json">
-            <div class="file-row">
-                <button class="btn info" id="loadFileBtn">📂 Загрузить JSON</button>
-                <button class="btn success" id="saveFileBtn">💾 Скачать JSON</button>
-            </div>
-        </div>
+  <button class="btn btn-usb" id="usbConnectBtn">Connect USB printer</button>
+  <button class="btn btn-usb" id="usbPrintBtn" disabled>Print via USB (TSPL text)</button>
 
-        <div class="section">
-            <div class="section-title">☁️ Облачное хранилище</div>
-            
-            <div class="cloud-status">
-                <span class="icon">☁️</span>
-                <span id="cloudStatus">Не загружено</span>
-            </div>
+  <div class="row">
+    <button class="btn btn-primary" id="pdfBtn">PDF 40×30</button>
+    <button class="btn btn-primary" id="pngBtn">PNG</button>
+  </div>
 
-            <input type="text" id="cloudUrl" placeholder="Ссылка на Яндекс.Диск или Google Drive" value="https://disk.yandex.ru/d/AZzpGJ765_EA_w">
-            <button class="btn cloud" id="loadCloudBtn">📥 Загрузить из облака</button>
-        </div>
+  <button class="btn btn-danger" id="printBtn">Browser print</button>
 
-        <div class="section">
-            <div class="section-title">📥 Импорт текстом</div>
-            <div class="hint" style="margin-bottom: 12px;">
-                Каждая бирка через пустую строку
-            </div>
-            <textarea id="import" placeholder="1РП3-Гр.-3.1
-Освещение электрощитовой
-ВВГнг(А)-LSLTx 3×1.5
-от 1РП3
-L=15м
+  <div id="printArea"></div>
+</div>
 
-1РП3-ЩО-0.1
-ЩО-0
-ВВГнг(А)-LSLTx 5×2.5
-от 1РП3
-L=50м"></textarea>
-            <button class="btn primary" id="importBtn">📥 Импортировать</button>
-        </div>
-    </div>
-    
-    <div class="selection-bar" id="selectionBar">
-        <div class="selection-info">
-            <span>🏷️</span>
-            <span id="selectionCount">0</span>
-            <span>выбрано</span>
-        </div>
-        <div class="selection-actions">
-            <button class="btn-usb" id="batchUsbBtn">⚡</button>
-            <button class="btn-png" id="batchPngBtn">🖼️</button>
-            <button class="btn-pdf" id="batchPdfBtn">📄</button>
-            <button class="btn-print" id="batchPrintBtn">🖨️</button>
-            <button class="btn-clear" id="clearSelectionBtn">✕</button>
-        </div>
-    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+let usbDevice=null;
+let usbEndpoint=1;
 
-    <div id="printArea"></div>
-    <canvas id="canvas" style="display:none"></canvas>
+function updatePreview(){
+  const p=document.getElementById('preview');
+  const lines=p.querySelectorAll('div');
+  for(let i=1;i<=5;i++){
+    lines[i-1].textContent=document.getElementById('l'+i).value;
+  }
+}
+['l1','l2','l3','l4','l5'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',updatePreview);
+});
+updatePreview();
 
-    <!-- Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+// --- TSPL текстовая команда ---
+// ВАЖНО: пока только латиница/цифры, без русских
+function buildTSPL(){
+  const l1=document.getElementById('l1').value;
+  const l2=document.getElementById('l2').value;
+  const l3=document.getElementById('l3').value;
+  const l4=document.getElementById('l4').value;
+  const l5=document.getElementById('l5').value;
 
-    <script>
-        const DEFAULT_CLOUD_URL = 'https://disk.yandex.ru/d/AZzpGJ765_EA_w';
-        
-        let labels = [];
-        let filtered = [];
-        let idx = -1;
-        let w1 = 'bold';
-        let w2 = 'normal';
-        let selectedIndices = new Set();
-        let usbDevice = null;
-        let usbEndpoint = null;
-        
-        function saveToStorage() {
-            try {
-                localStorage.setItem('birki_labels', JSON.stringify(labels));
-                updateLocalStatus();
-            } catch(e) {
-                console.error('Ошибка сохранения:', e);
-            }
-        }
-        
-        function loadFromStorage() {
-            try {
-                const saved = localStorage.getItem('birki_labels');
-                if (saved) {
-                    labels = JSON.parse(saved);
-                    updateLocalStatus();
-                }
-            } catch(e) {
-                console.error('Ошибка загрузки:', e);
-            }
-        }
+  let y=20;          // координаты в точках
+  const xLeft=20;    // слева небольшой отступ
 
-        function updateLocalStatus() {
-            document.getElementById('localStatus').textContent = 
-                labels.length > 0 ? `✅ ${labels.length} бирок` : '❌ Пусто';
-        }
+  let cmd='';
+  cmd+='SIZE 40 mm,30 mm\r\n';
+  cmd+='GAP 2 mm,0 mm\r\n';
+  cmd+='DIRECTION 1\r\n';     // повернуть, если этикетка идёт поперёк
+  cmd+='REFERENCE 0,0\r\n';
+  cmd+='CLS\r\n';
 
-        function fixLabels() {
-            let fixed = 0;
-            labels.forEach(label => {
-                if (label.line4) {
-                    const parts = label.line4.split(' ');
-                    if (parts.length === 2 && parts[0] === 'от') {
-                        const code = parts[1];
-                        const codeParts = code.split('-');
-                        if (codeParts.length > 0) {
-                            const lastPart = codeParts[codeParts.length - 1];
-                            if (lastPart && /^\d/.test(lastPart)) {
-                                codeParts.pop();
-                                label.line4 = 'от ' + codeParts.join('-');
-                                fixed++;
-                            }
-                        }
-                    }
-                }
-            });
-            
-            if (fixed > 0) {
-                saveToStorage();
-                applySearch();
-                toast(`✅ Исправлено ${fixed} бирок!`, 'success');
-            } else {
-                toast('✅ Всё уже исправлено!', 'success');
-            }
-        }
+  if(l1){
+    // крупнее для первой строки
+    cmd+=`TEXT ${xLeft},${y},"4",0,1,1,"${l1}"\r\n`;
+    y+=40;
+  }
+  if(l2){
+    cmd+=`TEXT ${xLeft},${y},"3",0,1,1,"${l2}"\r\n`;
+    y+=28;
+  }
+  if(l3){
+    cmd+=`TEXT ${xLeft},${y},"3",0,1,1,"${l3}"\r\n`;
+    y+=28;
+  }
+  if(l4){
+    cmd+=`TEXT ${xLeft},${y},"3",0,1,1,"${l4}"\r\n`;
+    y+=28;
+  }
+  if(l5){
+    cmd+=`TEXT ${xLeft},${y},"3",0,1,1,"${l5}"\r\n`;
+  }
 
-        async function loadFromCloud() {
-            const url = document.getElementById('cloudUrl').value || DEFAULT_CLOUD_URL;
-            if (!url) {
-                toast('⚠️ Введи ссылку', 'error');
-                return;
-            }
-            
-            try {
-                document.getElementById('cloudStatus').textContent = 'Загрузка...';
-                
-                let downloadUrl = '';
-                
-                if (url.includes('disk.yandex') || url.includes('yadi.sk')) {
-                    downloadUrl = `https://cloud-api.yandex.net/v1/disk/public/resources/download?public_key=${encodeURIComponent(url)}`;
-                    
-                    const apiResponse = await fetch(downloadUrl);
-                    const apiData = await apiResponse.json();
-                    
-                    if (apiData.href) {
-                        downloadUrl = apiData.href;
-                    } else {
-                        throw new Error('Не удалось получить ссылку на скачивание');
-                    }
-                }
-                else if (url.includes('drive.google.com')) {
-                    let fileId = url.match(/\/d\/([^\/]+)/)?.[1];
-                    if (!fileId) fileId = url.match(/id=([^&]+)/)?.[1];
-                    if (!fileId) throw new Error('Неверная ссылка Google Drive');
-                    
-                    downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
-                }
-                else {
-                    throw new Error('Поддерживаются только Яндекс.Диск и Google Drive');
-                }
-                
-                const response = await fetch(downloadUrl);
-                const data = await response.json();
-                
-                if (Array.isArray(data)) {
-                    labels = data;
-                    saveToStorage();
-                    updateStats();
-                    applySearch();
-                    document.getElementById('cloudStatus').textContent = `✅ Загружено ${labels.length} бирок`;
-                    toast('☁️ База загружена!', 'success');
-                } else {
-                    throw new Error('Неверный формат файла');
-                }
-            } catch(e) {
-                console.error('Ошибка загрузки:', e);
-                document.getElementById('cloudStatus').textContent = '💡 Используй локальную загрузку';
-                toast('💡 Используй локальную загрузку', 'success');
-            }
-        }
+  cmd+='PRINT 1,1\r\n';
+  return cmd;
+}
 
-        function loadFromFile() {
-            document.getElementById('fileInput').click();
-        }
+// --- USB connect ---
+async function connectUSB(){
+  if(!navigator.usb){
+    alert('WebUSB only in Chrome/Edge');
+    return;
+  }
+  try{
+    usbDevice=await navigator.usb.requestDevice({
+      filters:[{classCode:7}]
+    });
+    await usbDevice.open();
+    if(usbDevice.configuration===null){
+      await usbDevice.selectConfiguration(1);
+    }
+    const iface=usbDevice.configuration.interfaces[0];
+    await usbDevice.claimInterface(iface.interfaceNumber);
+    const outEp=iface.alternate.endpoints.find(e=>e.direction==='out');
+    if(outEp) usbEndpoint=outEp.endpointNumber;
+    document.getElementById('usbStatus').textContent='USB: connected '+(usbDevice.productName||'');
+    document.getElementById('usbPrintBtn').disabled=false;
+  }catch(e){
+    console.error(e);
+    alert('USB error: '+e.message);
+  }
+}
 
-        function handleFileSelect(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                try {
-                    const data = JSON.parse(event.target.result);
-                    if (Array.isArray(data)) {
-                        labels = data;
-                        saveToStorage();
-                        updateStats();
-                        applySearch();
-                        toast(`✅ Загружено ${labels.length} бирок!`, 'success');
-                    } else {
-                        throw new Error('Неверный формат');
-                    }
-                } catch(err) {
-                    toast('❌ Ошибка чтения файла', 'error');
-                }
-            };
-            reader.readAsText(file);
-        }
+async function printUSB(){
+  if(!usbDevice) return;
+  const cmd=buildTSPL();
+  // строго ASCII, без UTF‑8
+  const bytes=new Uint8Array(cmd.length);
+  for(let i=0;i<cmd.length;i++){
+    bytes[i]=cmd.charCodeAt(i)&0xFF;
+  }
+  try{
+    await usbDevice.transferOut(usbEndpoint,bytes);
+  }catch(e){
+    console.error(e);
+    alert('Print error: '+e.message);
+  }
+}
 
-        function saveToFile() {
-            const dataStr = JSON.stringify(labels, null, 2);
-            const blob = new Blob([dataStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'emil_birki_' + new Date().toISOString().slice(0,10) + '.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            toast('💾 Файл сохранён!', 'success');
-        }
-        
-        function toast(msg, type) {
-            const t = document.createElement('div');
-            t.className = 'toast ' + (type || '');
-            t.textContent = msg;
-            document.body.appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        }
-        
-        function updateStats() {
-            document.getElementById('stats').textContent = labels.length;
-        }
+// --- PDF 40×30 landscape ---
+async function exportPDF(){
+  const {jsPDF}=window.jspdf;
+  const pdf=new jsPDF({
+    orientation:'landscape',
+    unit:'mm',
+    format:[40,30]
+  });
+  const canvas=await html2canvas(document.getElementById('preview'),{
+    scale:2,
+    backgroundColor:'#ffffff'
+  });
+  const img=canvas.toDataURL('image/png');
+  pdf.addImage(img,'PNG',0,0,40,30);
+  pdf.save('birka.pdf');
+}
 
-        function updateSelectionBar() {
-            const bar = document.getElementById('selectionBar');
-            const count = document.getElementById('selectionCount');
-            
-            if (selectedIndices.size > 0) {
-                bar.classList.add('visible');
-                count.textContent = selectedIndices.size;
-            } else {
-                bar.classList.remove('visible');
-            }
-        }
+// --- PNG ---
+async function exportPNG(){
+  const canvas=await html2canvas(document.getElementById('preview'),{
+    scale:2,
+    backgroundColor:'#ffffff'
+  });
+  const a=document.createElement('a');
+  a.href=canvas.toDataURL('image/png');
+  a.download='birka.png';
+  a.click();
+}
 
-        function toggleSelection(index, checkbox) {
-            if (checkbox.checked) {
-                selectedIndices.add(index);
-            } else {
-                selectedIndices.delete(index);
-            }
-            updateSelectionBar();
-        }
+// --- Browser print ---
+function browserPrint(){
+  const f1=12,f2=10,lh=1.2,pt=0.5;
+  const label={
+    line1:document.getElementById('l1').value,
+    line2:document.getElementById('l2').value,
+    line3:document.getElementById('l3').value,
+    line4:document.getElementById('l4').value,
+    line5:document.getElementById('l5').value
+  };
+  const html=`
+    <div class="print-label" style="padding-top:${pt}mm;line-height:${lh}">
+      <div style="font-size:${f1}pt;font-weight:bold">${label.line1||''}</div>
+      <div style="font-size:${f2}pt">${label.line2||''}</div>
+      <div style="font-size:${f2}pt">${label.line3||''}</div>
+      <div style="font-size:${f2}pt">${label.line4||''}</div>
+      <div style="font-size:${f2}pt">${label.line5||''}</div>
+    </div>`;
+  document.getElementById('printArea').innerHTML=html;
+  setTimeout(()=>window.print(),200);
+}
 
-        function clearSelection() {
-            selectedIndices.clear();
-            document.querySelectorAll('.card-checkbox').forEach(cb => cb.checked = false);
-            updateSelectionBar();
-        }
-        
-        function render() {
-            const g = document.getElementById('grid');
-            g.innerHTML = '';
-            if (!filtered.length) {
-                g.innerHTML = '<div class="empty"><div class="empty-icon">🏷️</div><div>Нет бирок</div><small>Загрузи из облака или файла</small></div>';
-                return;
-            }
-            filtered.forEach((l,i) => {
-                const c = document.createElement('div');
-                c.className = 'card' + (i===idx?' selected':'');
-                
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.className = 'card-checkbox';
-                checkbox.checked = selectedIndices.has(i);
-                checkbox.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    toggleSelection(i, checkbox);
-                });
-                
-                const content = document.createElement('div');
-                content.className = 'card-content';
-                content.innerHTML = `<div class="card-title">${l.line1||l.id||''}</div><div class="card-text">${l.line2||l.label||''}</div><div class="card-text">${l.line3||l.reference||''}</div>`;
-                content.addEventListener('click', () => {
-                    idx = i;
-                    render();
-                    fillEditor();
-                    showTab(1);
-                });
-                
-                c.appendChild(checkbox);
-                c.appendChild(content);
-                g.appendChild(c);
-            });
-        }
-        
-        function applySearch() {
-            const q = document.getElementById('search').value.toLowerCase();
-            filtered = q ? labels.filter(l => Object.values(l).some(v => String(v).toLowerCase().includes(q))) : labels.slice();
-            selectedIndices.clear();
-            updateSelectionBar();
-            render();
-        }
-        
-        function showTab(n) {
-            document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
-            document.querySelectorAll('.content').forEach((c,i) => c.classList.toggle('active', i===n));
-        }
-        
-        function fillEditor() {
-            if (idx < 0) {
-                document.getElementById('editor').style.display = 'none';
-                document.getElementById('hint').style.display = 'block';
-                ['usbPrintBtn', 'printBtn', 'pngBtn', 'pdfBtn', 'saveBtn'].forEach(id => {
-                    document.getElementById(id).disabled = true;
-                });
-                return;
-            }
-            const l = filtered[idx];
-            document.getElementById('l1').value = l.line1 || l.id || '';
-            document.getElementById('l2').value = l.line2 || l.label || '';
-            document.getElementById('l3').value = l.line3 || l.reference || '';
-            document.getElementById('l4').value = l.line4 || '';
-            document.getElementById('l5').value = l.line5 || '';
-            document.getElementById('editor').style.display = 'block';
-            document.getElementById('hint').style.display = 'none';
-            ['printBtn', 'pngBtn', 'pdfBtn', 'saveBtn'].forEach(id => {
-                document.getElementById(id).disabled = false;
-            });
-            if (usbDevice) {
-                document.getElementById('usbPrintBtn').disabled = false;
-            }
-            updatePreview();
-        }
-        
-        function updatePreview() {
-            const pt = parseFloat(document.getElementById('s4').value);
-            const lh = parseFloat(document.getElementById('s3').value);
-            const f1 = parseFloat(document.getElementById('s1').value);
-            const f2 = parseFloat(document.getElementById('s2').value);
-            
-            const p = document.getElementById('preview');
-            p.style.paddingTop = pt + 'mm';
-            p.style.lineHeight = lh;
-            
-            const lines = p.querySelectorAll('div');
-            lines[0].textContent = document.getElementById('l1').value;
-            lines[0].style.fontSize = f1 + 'pt';
-            lines[0].style.fontWeight = w1;
-            
-            for (let i=1; i<5; i++) {
-                lines[i].textContent = document.getElementById('l'+(i+1)).value;
-                lines[i].style.fontSize = f2 + 'pt';
-                lines[i].style.fontWeight = w2;
-            }
-            
-            document.getElementById('v1').textContent = f1 + 'pt';
-            document.getElementById('v2').textContent = f2 + 'pt';
-            document.getElementById('v3').textContent = lh.toFixed(2);
-            document.getElementById('v4').textContent = pt + 'мм';
-        }
-
-        // ====== USB ПЕЧАТЬ ЧЕРЕЗ BITMAP ======
-        
-        async function connectUSB() {
-            if (!navigator.usb) {
-                toast('❌ WebUSB не поддерживается! Используй Chrome/Edge', 'error');
-                return;
-            }
-            
-            try {
-                usbDevice = await navigator.usb.requestDevice({
-                    filters: [
-                        { vendorId: 0x0416 },
-                        { vendorId: 0x1FC9 },
-                        { vendorId: 0x0483 },
-                        { vendorId: 0x1203 },
-                        { classCode: 7 }
-                    ]
-                });
-                
-                await usbDevice.open();
-                
-                if (usbDevice.configuration === null) {
-                    await usbDevice.selectConfiguration(1);
-                }
-                
-                let printerInterface = null;
-                for (const iface of usbDevice.configuration.interfaces) {
-                    if (iface.alternate.interfaceClass === 7) {
-                        printerInterface = iface;
-                        break;
-                    }
-                }
-                
-                if (!printerInterface) {
-                    printerInterface = usbDevice.configuration.interfaces[0];
-                }
-                
-                await usbDevice.claimInterface(printerInterface.interfaceNumber);
-                
-                for (const endpoint of printerInterface.alternate.endpoints) {
-                    if (endpoint.direction === 'out') {
-                        usbEndpoint = endpoint.endpointNumber;
-                        break;
-                    }
-                }
-                
-                if (!usbEndpoint) {
-                    usbEndpoint = 1;
-                }
-                
-                document.getElementById('usbStatus').className = 'usb-status connected';
-                document.getElementById('usbStatus').textContent = '🟢 Принтер подключен: ' + (usbDevice.productName || 'USB Принтер');
-                
-                if (idx >= 0) {
-                    document.getElementById('usbPrintBtn').disabled = false;
-                }
-                
-                toast('✅ USB принтер подключен!', 'success');
-                
-            } catch (error) {
-                console.error('Ошибка подключения USB:', error);
-                toast('❌ Не удалось подключиться: ' + error.message, 'error');
-            }
-        }
-        
-        async function printUSB() {
-            if (!usbDevice) {
-                toast('❌ Сначала подключи принтер!', 'error');
-                return;
-            }
-            
-            if (idx < 0) return;
-            
-            try {
-                // Создаём временную бирку для рендера
-                const canvas = await html2canvas(document.getElementById('preview'), {
-                    scale: 2,
-                    backgroundColor: '#ffffff'
-                });
-                
-                // Конвертируем в чёрно-белый bitmap
-                const bitmapData = canvasToBitmap(canvas);
-                
-                // Генерируем TSPL команды
-                let cmd = '';
-                cmd += 'SIZE 40 mm, 30 mm\r\n';
-                cmd += 'GAP 2 mm, 0 mm\r\n';
-                cmd += 'DIRECTION 0\r\n';
-                cmd += 'CLS\r\n';
-                cmd += `BITMAP 0,0,${bitmapData.width},${bitmapData.height},1,${bitmapData.data}\r\n`;
-                cmd += 'PRINT 1,1\r\n';
-                
-                console.log('TSPL команда с BITMAP:', cmd.substring(0, 200) + '...');
-                
-                const encoder = new TextEncoder();
-                const data = encoder.encode(cmd);
-                
-                await usbDevice.transferOut(usbEndpoint, data);
-                
-                toast('⚡ Отправлено на принтер (картинка)!', 'success');
-                
-            } catch (error) {
-                console.error('Ошибка печати:', error);
-                toast('❌ Ошибка печати: ' + error.message, 'error');
-            }
-        }
-        
-        async function batchPrintUSB() {
-            if (!usbDevice) {
-                toast('❌ Сначала подключи принтер!', 'error');
-                return;
-            }
-            
-            if (selectedIndices.size === 0) {
-                toast('⚠️ Выбери бирки!', 'error');
-                return;
-            }
-            
-            try {
-                const sortedIndices = Array.from(selectedIndices).sort((a, b) => a - b);
-                
-                for (const i of sortedIndices) {
-                    const label = filtered[i];
-                    const tempDiv = await createTempLabel(label);
-                    
-                    const canvas = await html2canvas(tempDiv.firstElementChild, {
-                        scale: 2,
-                        backgroundColor: '#ffffff'
-                    });
-                    
-                    document.body.removeChild(tempDiv);
-                    
-                    const bitmapData = canvasToBitmap(canvas);
-                    
-                    let cmd = '';
-                    cmd += 'SIZE 40 mm, 30 mm\r\n';
-                    cmd += 'GAP 2 mm, 0 mm\r\n';
-                    cmd += 'DIRECTION 0\r\n';
-                    cmd += 'CLS\r\n';
-                    cmd += `BITMAP 0,0,${bitmapData.width},${bitmapData.height},1,${bitmapData.data}\r\n`;
-                    cmd += 'PRINT 1,1\r\n';
-                    
-                    const encoder = new TextEncoder();
-                    const data = encoder.encode(cmd);
-                    await usbDevice.transferOut(usbEndpoint, data);
-                    
-                    await new Promise(resolve => setTimeout(resolve, 500));
-                }
-                
-                toast(`⚡ Напечатано ${selectedIndices.size} бирок!`, 'success');
-                
-            } catch (error) {
-                console.error('Ошибка печати:', error);
-                toast('❌ Ошибка печати: ' + error.message, 'error');
-            }
-        }
-
-        function canvasToBitmap(canvas) {
-            const ctx = canvas.getContext('2d');
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            
-            const width = canvas.width;
-            const height = canvas.height;
-            const bytesPerRow = Math.ceil(width / 8);
-            
-            let bitmapHex = '';
-            
-            for (let y = 0; y < height; y++) {
-                let rowBits = '';
-                for (let x = 0; x < width; x++) {
-                    const idx = (y * width + x) * 4;
-                    const r = data[idx];
-                    const g = data[idx + 1];
-                    const b = data[idx + 2];
-                    const brightness = (r + g + b) / 3;
-                    rowBits += brightness < 128 ? '1' : '0';
-                }
-                
-                // Дополняем до кратности 8
-                while (rowBits.length % 8 !== 0) {
-                    rowBits += '0';
-                }
-                
-                // Конвертируем биты в hex
-                for (let i = 0; i < rowBits.length; i += 8) {
-                    const byte = rowBits.substring(i, i + 8);
-                    const hex = parseInt(byte, 2).toString(16).padStart(2, '0');
-                    bitmapHex += hex;
-                }
-            }
-            
-            return {
-                width: width,
-                height: height,
-                data: bitmapHex
-            };
-        }
-
-        async function createTempLabel(label) {
-            const pt = parseFloat(document.getElementById('s4').value);
-            const lh = parseFloat(document.getElementById('s3').value);
-            const f1 = parseFloat(document.getElementById('s1').value);
-            const f2 = parseFloat(document.getElementById('s2').value);
-            
-            const tempDiv = document.createElement('div');
-            tempDiv.style.position = 'absolute';
-            tempDiv.style.left = '-9999px';
-            
-            tempDiv.innerHTML = `
-                <div class="label" style="padding-top:${pt}mm;line-height:${lh};width:40mm;height:30mm;border:2px solid #000;display:flex;flex-direction:column;justify-content:center;text-align:center;padding-left:2mm;padding-right:2mm;background:white;font-size:10pt;">
-                    <div style="font-size:${f1}pt;font-weight:${w1}">${label.line1 || ''}</div>
-                    <div style="font-size:${f2}pt;font-weight:${w2}">${label.line2 || ''}</div>
-                    <div style="font-size:${f2}pt;font-weight:${w2}">${label.line3 || ''}</div>
-                    <div style="font-size:${f2}pt;font-weight:${w2}">${label.line4 || ''}</div>
-                    <div style="font-size:${f2}pt;font-weight:${w2}">${label.line5 || ''}</div>
-                </div>
-            `;
-            document.body.appendChild(tempDiv);
-            
-            await new Promise(resolve => setTimeout(resolve, 100));
-            
-            return tempDiv;
-        }
-
-        // ====== PNG/PDF ЭКСПОРТ ======
-
-        async function exportPNG() {
-            if (idx < 0) return;
-            
-            try {
-                const canvas = await html2canvas(document.getElementById('preview'), {
-                    scale: 2,
-                    backgroundColor: '#ffffff'
-                });
-                
-                const l = document.getElementById('l1').value;
-                const a = document.createElement('a');
-                a.href = canvas.toDataURL('image/png');
-                a.download = `emil_birka_${l.replace(/[^a-zA-Z0-9]/g,'_')}.png`;
-                a.click();
-                toast('🖼️ PNG сохранён!', 'success');
-            } catch(e) {
-                console.error('Ошибка PNG:', e);
-                toast('❌ Ошибка экспорта PNG', 'error');
-            }
-        }
-
-        async function batchPNG() {
-            if (selectedIndices.size === 0) {
-                toast('⚠️ Выбери бирки!', 'error');
-                return;
-            }
-
-            try {
-                const sortedIndices = Array.from(selectedIndices).sort((a, b) => a - b);
-                
-                for (const i of sortedIndices) {
-                    const label = filtered[i];
-                    const tempDiv = await createTempLabel(label);
-                    
-                    const canvas = await html2canvas(tempDiv.firstElementChild, {
-                        scale: 2,
-                        backgroundColor: '#ffffff'
-                    });
-                    
-                    const a = document.createElement('a');
-                    const filename = (label.line1 || 'birka').replace(/[^a-zA-Z0-9]/g, '_');
-                    a.href = canvas.toDataURL('image/png');
-                    a.download = `emil_${filename}.png`;
-                    a.click();
-                    
-                    document.body.removeChild(tempDiv);
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                }
-                
-                toast(`🖼️ Создано ${selectedIndices.size} PNG файлов!`, 'success');
-                
-            } catch(e) {
-                console.error('Ошибка PNG:', e);
-                toast('❌ Ошибка экспорта PNG', 'error');
-            }
-        }
-
-        async function exportPDF() {
-            if (idx < 0) return;
-            
-            try {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({
-                    orientation: 'landscape',
-                    unit: 'mm',
-                    format: [40, 30]
-                });
-
-                const canvas = await html2canvas(document.getElementById('preview'), {
-                    scale: 2,
-                    backgroundColor: '#ffffff'
-                });
-
-                const imgData = canvas.toDataURL('image/png');
-                pdf.addImage(imgData, 'PNG', 0, 0, 40, 30);
-                
-                const l = document.getElementById('l1').value;
-                pdf.save(`emil_birka_${l.replace(/[^a-zA-Z0-9]/g,'_')}.pdf`);
-                toast('📄 PDF сохранён!', 'success');
-            } catch(e) {
-                console.error('Ошибка PDF:', e);
-                toast('❌ Ошибка экспорта PDF', 'error');
-            }
-        }
-
-        async function batchPDF() {
-            if (selectedIndices.size === 0) {
-                toast('⚠️ Выбери бирки!', 'error');
-                return;
-            }
-
-            try {
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({
-                    orientation: 'landscape',
-                    unit: 'mm',
-                    format: [40, 30]
-                });
-
-                let isFirst = true;
-                const sortedIndices = Array.from(selectedIndices).sort((a, b) => a - b);
-
-                for (const i of sortedIndices) {
-                    if (!isFirst) {
-                        pdf.addPage();
-                    }
-                    isFirst = false;
-
-                    const label = filtered[i];
-                    const tempDiv = await createTempLabel(label);
-
-                    const canvas = await html2canvas(tempDiv.firstElementChild, {
-                        scale: 2,
-                        backgroundColor: '#ffffff'
-                    });
-
-                    const imgData = canvas.toDataURL('image/png');
-                    pdf.addImage(imgData, 'PNG', 0, 0, 40, 30);
-
-                    document.body.removeChild(tempDiv);
-                }
-
-                pdf.save(`emil_birki_${selectedIndices.size}_${new Date().toISOString().slice(0,10)}.pdf`);
-                toast(`📄 PDF создан: ${selectedIndices.size} бирок!`, 'success');
-            } catch(e) {
-                console.error('Ошибка PDF:', e);
-                toast('❌ Ошибка создания PDF', 'error');
-            }
-        }
-
-        function printSingle() {
-            if (idx < 0) return;
-            
-            const f1 = parseFloat(document.getElementById('s1').value);
-            const f2 = parseFloat(document.getElementById('s2').value);
-            const lh = parseFloat(document.getElementById('s3').value);
-            const pt = parseFloat(document.getElementById('s4').value);
-            
-            const label = filtered[idx];
-            const html = getLabelHTML(label, f1, f2, lh, pt);
-            
-            document.getElementById('printArea').innerHTML = html;
-            setTimeout(() => {
-                window.print();
-                toast('🖨️ Отправлено на печать!', 'success');
-            }, 300);
-        }
-
-        function getLabelHTML(label, f1, f2, lh, pt) {
-            const lines = [
-                `<div style="font-size:${f1}pt;font-weight:${w1}">${label.line1 || ''}</div>`,
-                `<div style="font-size:${f2}pt;font-weight:${w2}">${label.line2 || ''}</div>`,
-                `<div style="font-size:${f2}pt;font-weight:${w2}">${label.line3 || ''}</div>`,
-                `<div style="font-size:${f2}pt;font-weight:${w2}">${label.line4 || ''}</div>`,
-                `<div style="font-size:${f2}pt;font-weight:${w2}">${label.line5 || ''}</div>`
-            ];
-            
-            return `<div class="print-label" style="padding-top:${pt}mm;line-height:${lh}">${lines.join('')}</div>`;
-        }
-        
-        function batchPrint() {
-            if (selectedIndices.size === 0) {
-                toast('⚠️ Выбери бирки!', 'error');
-                return;
-            }
-
-            const f1 = parseFloat(document.getElementById('s1').value);
-            const f2 = parseFloat(document.getElementById('s2').value);
-            const lh = parseFloat(document.getElementById('s3').value);
-            const pt = parseFloat(document.getElementById('s4').value);
-            
-            const htmlParts = [];
-            selectedIndices.forEach(i => {
-                const label = filtered[i];
-                htmlParts.push(getLabelHTML(label, f1, f2, lh, pt));
-            });
-
-            document.getElementById('printArea').innerHTML = htmlParts.join('');
-            setTimeout(() => {
-                window.print();
-                toast(`🖨️ ${selectedIndices.size} бирок отправлены на печать!`, 'success');
-            }, 300);
-        }
-
-        function importLabels() {
-            const text = document.getElementById('import').value;
-            const blocks = text.trim().split('\n\n');
-            let imported = 0;
-            
-            blocks.forEach(block => {
-                const lines = block.trim().split('\n').map(l => l.trim()).filter(l => l);
-                if (lines.length >= 5) {
-                    labels.push({
-                        line1: lines[0],
-                        line2: lines[1],
-                        line3: lines[2],
-                        line4: lines[3],
-                        line5: lines[4]
-                    });
-                    imported++;
-                }
-            });
-            
-            if (imported > 0) {
-                saveToStorage();
-                updateStats();
-                applySearch();
-                document.getElementById('import').value = '';
-                toast(`✅ Импортировано ${imported} бирок!`, 'success');
-            } else {
-                toast('⚠️ Не найдено корректных бирок', 'error');
-            }
-        }
-
-        // Event listeners
-        document.getElementById('search').addEventListener('input', applySearch);
-        document.getElementById('tabList').addEventListener('click', () => showTab(0));
-        document.getElementById('tabEditor').addEventListener('click', () => showTab(1));
-        document.getElementById('tabManage').addEventListener('click', () => showTab(2));
-
-        document.querySelectorAll('.slider').forEach(s => {
-            s.addEventListener('input', updatePreview);
-        });
-        
-        document.querySelectorAll('.toggle').forEach(t => {
-            t.querySelectorAll('button').forEach(b => {
-                b.addEventListener('click', function() {
-                    const parent = this.parentElement;
-                    const toggle = parent.id === 'toggle1' ? 1 : 2;
-                    const weight = this.dataset.weight;
-                    if (toggle === 1) w1 = weight;
-                    else w2 = weight;
-                    parent.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    updatePreview();
-                });
-            });
-        });
-
-        document.querySelectorAll('input[type="text"]').forEach(input => {
-            input.addEventListener('input', updatePreview);
-        });
-
-        document.getElementById('saveBtn').addEventListener('click', function() {
-            if (idx < 0) return;
-            filtered[idx].line1 = document.getElementById('l1').value;
-            filtered[idx].line2 = document.getElementById('l2').value;
-            filtered[idx].line3 = document.getElementById('l3').value;
-            filtered[idx].line4 = document.getElementById('l4').value;
-            filtered[idx].line5 = document.getElementById('l5').value;
-            
-            const realIdx = labels.indexOf(filtered[idx]);
-            if (realIdx >= 0) {
-                labels[realIdx] = filtered[idx];
-            }
-            
-            saveToStorage();
-            toast('💾 Бирка сохранена!', 'success');
-        });
-
-        document.getElementById('usbConnectBtn').addEventListener('click', connectUSB);
-        document.getElementById('usbPrintBtn').addEventListener('click', printUSB);
-        document.getElementById('batchUsbBtn').addEventListener('click', batchPrintUSB);
-        document.getElementById('printBtn').addEventListener('click', printSingle);
-        document.getElementById('batchPrintBtn').addEventListener('click', batchPrint);
-        document.getElementById('pngBtn').addEventListener('click', exportPNG);
-        document.getElementById('batchPngBtn').addEventListener('click', batchPNG);
-        document.getElementById('pdfBtn').addEventListener('click', exportPDF);
-        document.getElementById('batchPdfBtn').addEventListener('click', batchPDF);
-        document.getElementById('fixBtn').addEventListener('click', fixLabels);
-        document.getElementById('loadFileBtn').addEventListener('click', loadFromFile);
-        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
-        document.getElementById('saveFileBtn').addEventListener('click', saveToFile);
-        document.getElementById('loadCloudBtn').addEventListener('click', loadFromCloud);
-        document.getElementById('importBtn').addEventListener('click', importLabels);
-        document.getElementById('clearSelectionBtn').addEventListener('click', clearSelection);
-
-        // Initialize
-        loadFromStorage();
-        updateStats();
-        render();
-    </script>
+// events
+document.getElementById('usbConnectBtn').addEventListener('click',connectUSB);
+document.getElementById('usbPrintBtn').addEventListener('click',printUSB);
+document.getElementById('pdfBtn').addEventListener('click',exportPDF);
+document.getElementById('pngBtn').addEventListener('click',exportPNG);
+document.getElementById('printBtn').addEventListener('click',browserPrint);
+</script>
 </body>
 </html>
