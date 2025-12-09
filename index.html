@@ -2,182 +2,425 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Бирки USB + PDF</title>
+  <title>Эмиль Бирки</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{
-      font-family:Arial,sans-serif;
-      background:#f5f5f5;
-      padding:20px;
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      background:#e5e7eb;
     }
-    .container{
-      max-width:400px;
-      margin:0 auto;
-      background:white;
-      padding:20px;
+    .app{max-width:520px;margin:0 auto;padding:12px;}
+    h1{font-size:20px;margin:0 0 8px;color:#1f2937;}
+    
+    .preview-wrap{
+      background:#f3f4f6;
       border-radius:12px;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+      padding:16px;
+      margin-bottom:12px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:250px;
     }
-    h1{
-      font-size:18px;
-      margin-bottom:16px;
-      color:#333;
-    }
-    .preview{
-      width:151px;
-      height:113px;
-      border:2px solid #000;
+    
+    .label{
+      width:40mm;
+      height:30mm;
+      border:3px solid #111827;
       background:white;
-      margin:0 auto 20px;
       position:relative;
-      overflow:hidden;
+      box-sizing:border-box;
     }
-    .line{
+    
+    .label-line{
       position:absolute;
+      left:0;
       width:100%;
       text-align:center;
-      font-family:Arial,sans-serif;
+      white-space:nowrap;
+      overflow:visible;
     }
-    input[type="text"]{
+    
+    .controls{
+      background:white;
+      border-radius:12px;
+      padding:16px;
+      margin-bottom:12px;
+    }
+    
+    .controls input[type="text"]{
       width:100%;
-      padding:8px;
+      padding:8px 10px;
       margin-bottom:8px;
-      border:1px solid #ddd;
-      border-radius:6px;
+      border-radius:8px;
+      border:1px solid #d1d5db;
       font-size:14px;
+      box-sizing:border-box;
     }
+    
+    .slider-group{
+      margin-bottom:12px;
+      padding:10px;
+      background:#f9fafb;
+      border-radius:8px;
+    }
+    
+    .slider-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:6px;
+    }
+    
+    .slider-label{
+      font-size:13px;
+      font-weight:600;
+      color:#374151;
+    }
+    
+    .slider-value{
+      background:#6366f1;
+      color:white;
+      padding:3px 10px;
+      border-radius:12px;
+      font-size:11px;
+      font-weight:700;
+      min-width:45px;
+      text-align:center;
+    }
+    
+    .slider{
+      width:100%;
+      height:6px;
+      border-radius:3px;
+      outline:none;
+      background:#e5e7eb;
+    }
+    
+    .slider::-webkit-slider-thumb{
+      -webkit-appearance:none;
+      width:20px;
+      height:20px;
+      background:#6366f1;
+      border-radius:50%;
+      cursor:pointer;
+      border:2px solid white;
+      box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    }
+    
+    .slider::-moz-range-thumb{
+      width:20px;
+      height:20px;
+      background:#6366f1;
+      border-radius:50%;
+      cursor:pointer;
+      border:2px solid white;
+      box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    }
+    
     .btn{
       width:100%;
-      padding:12px;
-      margin-bottom:8px;
+      padding:12px 14px;
+      border-radius:8px;
       border:none;
-      border-radius:6px;
+      font-weight:600;
       font-size:14px;
-      font-weight:600;
       cursor:pointer;
+      margin-bottom:8px;
       color:white;
+      transition:all 0.2s;
     }
-    .btn:disabled{opacity:0.5;cursor:not-allowed;}
-    .btn-connect{background:#10b981;}
+    
+    .btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,0.15);}
+    .btn:active:not(:disabled){transform:translateY(0);}
+    .btn:disabled{opacity:.5;cursor:not-allowed;}
+    
+    .btn-primary{background:#6366f1;}
+    .btn-usb{background:#ec4899;}
     .btn-disconnect{background:#f59e0b;}
-    .btn-print{background:#ec4899;}
-    .btn-pdf{background:#6366f1;}
+    .btn-danger{background:#ef4444;}
+    .btn-success{background:#10b981;}
+    
+    .row{display:flex;gap:8px;margin-bottom:8px;}
+    .row .btn{flex:1;margin-bottom:0;}
+    
     .status{
-      padding:10px;
-      margin-bottom:12px;
-      background:#f0f0f0;
-      border-radius:6px;
       font-size:13px;
-      text-align:center;
+      margin-bottom:12px;
+      padding:10px;
+      background:white;
+      border-radius:8px;
       font-weight:600;
     }
+    
     .hint{
       font-size:12px;
-      color:#666;
+      color:#1f2937;
+      margin-bottom:12px;
       padding:10px;
       background:#dcfce7;
-      border-radius:6px;
-      margin-bottom:12px;
+      border-radius:8px;
+      line-height:1.5;
     }
-    .section{
-      margin-top:16px;
-      padding-top:16px;
-      border-top:2px solid #e5e7eb;
+    
+    .section-title{
+      font-size:15px;
+      font-weight:700;
+      color:#1f2937;
+      margin-bottom:12px;
+      padding-bottom:8px;
+      border-bottom:2px solid #e5e7eb;
+    }
+    
+    #printArea{display:none;}
+    
+    @media print{
+      @page{size:40mm 30mm;margin:0;}
+      body>*:not(#printArea){display:none!important;}
+      #printArea{display:block!important;}
+      .print-label{
+        width:40mm;
+        height:30mm;
+        border:2px solid #000;
+        box-sizing:border-box;
+        padding:0 2mm;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        text-align:center;
+        font-size:10pt;
+        line-height:1.2;
+      }
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <h1>🏷️ Печать бирок</h1>
-  
+<div class="app">
+  <h1>🏷️ Эмиль Бирки</h1>
+
   <div class="hint">
-    ✅ Печатается как картинка. Что видишь — то и будет!
+    ✅ Печать картинкой через USB. Что видишь — то и напечатается!
   </div>
 
-  <div class="preview" id="preview">
-    <div class="line" id="l1" style="top:15px;font-size:14pt;font-weight:bold"></div>
-    <div class="line" id="l2" style="top:40px;font-size:11pt"></div>
-    <div class="line" id="l3" style="top:60px;font-size:11pt"></div>
-    <div class="line" id="l4" style="top:80px;font-size:11pt"></div>
-    <div class="line" id="l5" style="top:100px;font-size:11pt"></div>
+  <div class="preview-wrap">
+    <div class="label" id="label">
+      <div class="label-line" id="line1"></div>
+      <div class="label-line" id="line2"></div>
+      <div class="label-line" id="line3"></div>
+      <div class="label-line" id="line4"></div>
+      <div class="label-line" id="line5"></div>
+    </div>
   </div>
 
-  <input id="i1" type="text" placeholder="Строка 1" value="1РП3-Гр.-3.1">
-  <input id="i2" type="text" placeholder="Строка 2" value="Освещение электрощитовой">
-  <input id="i3" type="text" placeholder="Строка 3" value="ВВГнг(А)-LSLTx 3×1.5">
-  <input id="i4" type="text" placeholder="Строка 4" value="от 1РП3">
-  <input id="i5" type="text" placeholder="Строка 5" value="L=15м">
-
-  <div class="section">
-    <div class="status" id="status">🔴 USB не подключен</div>
-    <button class="btn btn-connect" id="connectBtn">🔌 Подключить принтер</button>
-    <button class="btn btn-disconnect" id="disconnectBtn" disabled>🔌 Отключить</button>
-    <button class="btn btn-print" id="printBtn" disabled>⚡ Печать через USB</button>
+  <div class="controls">
+    <div class="section-title">📝 Текст бирки</div>
+    <input id="l1" type="text" placeholder="Строка 1" value="1РП3-Гр.-3.1">
+    <input id="l2" type="text" placeholder="Строка 2" value="Освещение электрощитовой">
+    <input id="l3" type="text" placeholder="Строка 3" value="ВВГнг(А)-LSLTx 3×1.5">
+    <input id="l4" type="text" placeholder="Строка 4" value="от 1РП3">
+    <input id="l5" type="text" placeholder="Строка 5" value="L=15м">
   </div>
 
-  <div class="section">
-    <button class="btn btn-pdf" id="pdfBtn">📄 Скачать PDF</button>
+  <div class="controls">
+    <div class="section-title">📏 Размеры шрифтов (pt)</div>
+    
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">Строка 1</span>
+        <span class="slider-value" id="f1Val">14</span>
+      </div>
+      <input type="range" class="slider" id="f1" min="8" max="24" value="14" step="1">
+    </div>
+    
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">Строки 2-5</span>
+        <span class="slider-value" id="f2Val">11</span>
+      </div>
+      <input type="range" class="slider" id="f2" min="7" max="18" value="11" step="1">
+    </div>
   </div>
+
+  <div class="controls">
+    <div class="section-title">📍 Позиции строк (px от верха)</div>
+    
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">Строка 1</span>
+        <span class="slider-value" id="y1Val">15</span>
+      </div>
+      <input type="range" class="slider" id="y1" min="5" max="80" value="15" step="1">
+    </div>
+    
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">Строка 2</span>
+        <span class="slider-value" id="y2Val">40</span>
+      </div>
+      <input type="range" class="slider" id="y2" min="15" max="100" value="40" step="1">
+    </div>
+    
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">Строка 3</span>
+        <span class="slider-value" id="y3Val">60</span>
+      </div>
+      <input type="range" class="slider" id="y3" min="25" max="110" value="60" step="1">
+    </div>
+    
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">Строка 4</span>
+        <span class="slider-value" id="y4Val">80</span>
+      </div>
+      <input type="range" class="slider" id="y4" min="35" max="120" value="80" step="1">
+    </div>
+    
+    <div class="slider-group">
+      <div class="slider-header">
+        <span class="slider-label">Строка 5</span>
+        <span class="slider-value" id="y5Val">100</span>
+      </div>
+      <input type="range" class="slider" id="y5" min="45" max="130" value="100" step="1">
+    </div>
+  </div>
+
+  <div class="status" id="usbStatus">🔴 USB: не подключен</div>
+
+  <div class="row">
+    <button class="btn btn-usb" id="usbConnectBtn">🔌 Подключить</button>
+    <button class="btn btn-disconnect" id="usbDisconnectBtn" disabled>🔌 Отключить</button>
+  </div>
+  
+  <button class="btn btn-usb" id="usbPrintBtn" disabled>⚡ Печать через USB</button>
+
+  <div class="row">
+    <button class="btn btn-primary" id="pdfBtn">📄 PDF</button>
+    <button class="btn btn-danger" id="printBtn">🖨️ Печать</button>
+  </div>
+
+  <div id="printArea"></div>
 </div>
-
-<canvas id="canvas"></canvas>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-let device=null;
-let endpoint=1;
+let usbDevice=null;
+let usbEndpoint=1;
 
-// Обновление превью
-function update(){
-  for(let i=1;i<=5;i++){
-    document.getElementById('l'+i).textContent=document.getElementById('i'+i).value;
-  }
-}
-['i1','i2','i3','i4','i5'].forEach(id=>document.getElementById(id).addEventListener('input',update));
-update();
-
-// USB подключение
-async function connect(){
-  if(!navigator.usb){alert('❌ Только Chrome/Edge');return;}
-  try{
-    device=await navigator.usb.requestDevice({filters:[{classCode:7}]});
-    await device.open();
-    if(!device.configuration) await device.selectConfiguration(1);
-    await device.claimInterface(0);
-    const ep=device.configuration.interfaces[0].alternate.endpoints.find(e=>e.direction==='out');
-    if(ep) endpoint=ep.endpointNumber;
-    
-    document.getElementById('status').textContent='🟢 '+(device.productName||'Подключен');
-    document.getElementById('connectBtn').disabled=true;
-    document.getElementById('disconnectBtn').disabled=false;
-    document.getElementById('printBtn').disabled=false;
-  }catch(e){
-    alert('❌ '+e.message);
-  }
-}
-
-async function disconnect(){
-  if(!device) return;
-  try{
-    await device.close();
-    device=null;
-    document.getElementById('status').textContent='🔴 USB не подключен';
-    document.getElementById('connectBtn').disabled=false;
-    document.getElementById('disconnectBtn').disabled=true;
-    document.getElementById('printBtn').disabled=true;
-  }catch(e){
-    alert('❌ '+e.message);
-  }
-}
-
-// Конвертация canvas в монохромный bitmap для TSPL
-async function printUSB(){
-  if(!device){alert('❌ Подключи принтер');return;}
+// Загрузка сохранённых настроек
+function loadSettings(){
+  const saved=localStorage.getItem('birka_settings');
+  if(!saved) return;
   
   try{
-    const canvas=await html2canvas(document.getElementById('preview'),{
+    const data=JSON.parse(saved);
+    ['l1','l2','l3','l4','l5'].forEach(id=>{
+      if(data[id]) document.getElementById(id).value=data[id];
+    });
+    ['f1','f2','y1','y2','y3','y4','y5'].forEach(id=>{
+      if(data[id]) document.getElementById(id).value=data[id];
+    });
+  }catch(e){
+    console.error('Ошибка загрузки:',e);
+  }
+}
+
+// Сохранение настроек
+function saveSettings(){
+  const data={};
+  ['l1','l2','l3','l4','l5','f1','f2','y1','y2','y3','y4','y5'].forEach(id=>{
+    data[id]=document.getElementById(id).value;
+  });
+  localStorage.setItem('birka_settings',JSON.stringify(data));
+}
+
+// Обновление превью
+function updatePreview(){
+  for(let i=1;i<=5;i++){
+    const line=document.getElementById('line'+i);
+    const text=document.getElementById('l'+i).value;
+    const y=parseInt(document.getElementById('y'+i).value);
+    const fontSize=i===1?parseInt(document.getElementById('f1').value):parseInt(document.getElementById('f2').value);
+    
+    line.textContent=text;
+    line.style.top=y+'px';
+    line.style.fontSize=fontSize+'pt';
+    line.style.fontWeight=i===1?'bold':'normal';
+  }
+  saveSettings();
+}
+
+function updateSliderValues(){
+  document.getElementById('f1Val').textContent=document.getElementById('f1').value+'pt';
+  document.getElementById('f2Val').textContent=document.getElementById('f2').value+'pt';
+  for(let i=1;i<=5;i++){
+    document.getElementById('y'+i+'Val').textContent=document.getElementById('y'+i).value+'px';
+  }
+}
+
+['l1','l2','l3','l4','l5'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',updatePreview);
+});
+
+['f1','f2','y1','y2','y3','y4','y5'].forEach(id=>{
+  document.getElementById(id).addEventListener('input',()=>{
+    updatePreview();
+    updateSliderValues();
+  });
+});
+
+loadSettings();
+updatePreview();
+updateSliderValues();
+
+// USB подключение
+async function connectUSB(){
+  if(!navigator.usb){
+    alert('❌ WebUSB работает только в Chrome/Edge');
+    return;
+  }
+  try{
+    usbDevice=await navigator.usb.requestDevice({
+      filters:[{vendorId:0x0416},{vendorId:0x1FC9},{classCode:7}]
+    });
+    await usbDevice.open();
+    if(!usbDevice.configuration) await usbDevice.selectConfiguration(1);
+    const iface=usbDevice.configuration.interfaces[0];
+    await usbDevice.claimInterface(iface.interfaceNumber);
+    const outEp=iface.alternate.endpoints.find(e=>e.direction==='out');
+    if(outEp) usbEndpoint=outEp.endpointNumber;
+    
+    document.getElementById('usbStatus').textContent='🟢 USB: '+(usbDevice.productName||'подключен');
+    document.getElementById('usbPrintBtn').disabled=false;
+    document.getElementById('usbConnectBtn').disabled=true;
+    document.getElementById('usbDisconnectBtn').disabled=false;
+  }catch(e){
+    alert('❌ '+e.message);
+  }
+}
+
+async function disconnectUSB(){
+  if(!usbDevice) return;
+  try{
+    await usbDevice.close();
+    usbDevice=null;
+    document.getElementById('usbStatus').textContent='🔴 USB: не подключен';
+    document.getElementById('usbPrintBtn').disabled=true;
+    document.getElementById('usbConnectBtn').disabled=false;
+    document.getElementById('usbDisconnectBtn').disabled=true;
+  }catch(e){
+    alert('❌ '+e.message);
+  }
+}
+
+// USB печать картинкой
+async function printUSB(){
+  if(!usbDevice){alert('❌ Подключи принтер');return;}
+  
+  try{
+    const canvas=await html2canvas(document.getElementById('label'),{
       scale:2,
       backgroundColor:'#ffffff'
     });
@@ -226,10 +469,10 @@ async function printUSB(){
     }
     
     const data=new Uint8Array(cmdBytes);
-    console.log('Отправляем байтов:',data.length);
+    console.log('Отправка:',data.length,'байт');
     
-    await device.transferOut(endpoint,data);
-    alert('✅ Отправлено на принтер!');
+    await usbDevice.transferOut(usbEndpoint,data);
+    alert('✅ Отправлено!');
     
   }catch(e){
     console.error(e);
@@ -237,53 +480,52 @@ async function printUSB(){
   }
 }
 
-// PDF экспорт с поворотом
+// PDF экспорт (альбомная 40×30мм)
 async function exportPDF(){
   try{
-    // Рендерим превью 40×30мм (альбомная)
-    const canvas=await html2canvas(document.getElementById('preview'),{
+    const canvas=await html2canvas(document.getElementById('label'),{
       scale:3,
       backgroundColor:'#ffffff'
     });
     
-    // Создаём новый canvas повёрнутый на 90° (30×40мм портретная)
-    const rotated=document.createElement('canvas');
-    rotated.width=canvas.height;  // меняем местами
-    rotated.height=canvas.width;
-    
-    const ctx=rotated.getContext('2d');
-    ctx.fillStyle='#ffffff';
-    ctx.fillRect(0,0,rotated.width,rotated.height);
-    
-    // Поворачиваем на 90° по часовой
-    ctx.translate(rotated.width/2,rotated.height/2);
-    ctx.rotate(90*Math.PI/180);
-    ctx.drawImage(canvas,-canvas.width/2,-canvas.height/2);
-    
-    // Создаём PDF портретный 30×40мм
     const {jsPDF}=window.jspdf;
     const pdf=new jsPDF({
-      orientation:'portrait',
+      orientation:'landscape',
       unit:'mm',
-      format:[30,40]
+      format:[40,30]
     });
     
-    const imgData=rotated.toDataURL('image/png');
-    pdf.addImage(imgData,'PNG',0,0,30,40);
-    
+    pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,40,30);
     pdf.save('birka.pdf');
-    alert('✅ PDF сохранён!');
   }catch(e){
-    console.error(e);
-    alert('❌ Ошибка: '+e.message);
+    alert('❌ '+e.message);
   }
 }
 
+// Обычная печать
+function browserPrint(){
+  const f1=parseInt(document.getElementById('f1').value);
+  const f2=parseInt(document.getElementById('f2').value);
+  
+  const html=`
+    <div class="print-label" style="line-height:1.3">
+      <div style="font-size:${f1}pt;font-weight:bold;margin-bottom:6px">${document.getElementById('l1').value}</div>
+      <div style="font-size:${f2}pt;margin-bottom:3px">${document.getElementById('l2').value}</div>
+      <div style="font-size:${f2}pt;margin-bottom:3px">${document.getElementById('l3').value}</div>
+      <div style="font-size:${f2}pt;margin-bottom:3px">${document.getElementById('l4').value}</div>
+      <div style="font-size:${f2}pt">${document.getElementById('l5').value}</div>
+    </div>`;
+  document.getElementById('printArea').innerHTML=html;
+  setTimeout(()=>window.print(),200);
+}
+
 // События
-document.getElementById('connectBtn').addEventListener('click',connect);
-document.getElementById('disconnectBtn').addEventListener('click',disconnect);
-document.getElementById('printBtn').addEventListener('click',printUSB);
+document.getElementById('usbConnectBtn').addEventListener('click',connectUSB);
+document.getElementById('usbDisconnectBtn').addEventListener('click',disconnectUSB);
+document.getElementById('usbPrintBtn').addEventListener('click',printUSB);
 document.getElementById('pdfBtn').addEventListener('click',exportPDF);
+document.getElementById('printBtn').addEventListener('click',browserPrint);
 </script>
 </body>
 </html>
+
