@@ -22,25 +22,6 @@
             overflow-x: hidden;
         }
         
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: moveBackground 20s linear infinite;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        @keyframes moveBackground {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
-        }
-        
         .header {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -59,18 +40,6 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            animation: fadeInDown 0.6s ease-out;
-        }
-        
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
         
         .logo-icon {
@@ -83,12 +52,6 @@
             justify-content: center;
             font-size: 20px;
             box-shadow: 0 4px 15px rgba(102,126,234,0.4);
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
         }
         
         .header h1 {
@@ -98,13 +61,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
         }
         
         .stats {
@@ -115,12 +71,6 @@
             font-size: 13px;
             font-weight: 700;
             box-shadow: 0 4px 15px rgba(102,126,234,0.4);
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
         }
         
         .tabs {
@@ -144,29 +94,14 @@
             color: #9ca3af;
             cursor: pointer;
             border-bottom: 3px solid transparent;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             position: relative;
-        }
-        
-        .tab::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translateX(-50%);
         }
         
         .tab.active {
             color: #667eea;
             background: linear-gradient(to bottom, rgba(102,126,234,0.05), transparent);
-        }
-        
-        .tab.active::after {
-            width: 100%;
+            border-bottom-color: #667eea;
         }
         
         .content {
@@ -179,18 +114,6 @@
         
         .content.active {
             display: block;
-            animation: fadeIn 0.5s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
         
         .search {
@@ -201,12 +124,6 @@
             margin-bottom: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             border: 1px solid rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .search:hover {
-            box-shadow: 0 12px 40px rgba(102,126,234,0.2);
-            transform: translateY(-2px);
         }
         
         .search input {
@@ -238,32 +155,15 @@
             padding: 16px;
             cursor: pointer;
             border: 2px solid rgba(255,255,255,0.3);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             display: flex;
             gap: 12px;
             align-items: start;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(102,126,234,0.1), transparent);
-            transition: left 0.5s ease;
-        }
-        
-        .card:hover::before {
-            left: 100%;
         }
         
         .card:hover {
-            transform: translateY(-4px) scale(1.02);
+            transform: translateY(-2px);
             box-shadow: 0 12px 40px rgba(102,126,234,0.2);
             border-color: #667eea;
         }
@@ -308,24 +208,6 @@
             margin-bottom: 16px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
             border: 1px solid rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-            animation: slideUp 0.6s ease-out;
-        }
-        
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .section:hover {
-            box-shadow: 0 12px 40px rgba(102,126,234,0.15);
-            transform: translateY(-2px);
         }
         
         .section-title {
@@ -349,69 +231,24 @@
             cursor: pointer;
             margin-bottom: 12px;
             color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            position: relative;
-            overflow: hidden;
         }
         
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
+        .btn.primary { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .btn.success { background: linear-gradient(135deg, #10B981, #059669); }
+        .btn.info { background: linear-gradient(135deg, #3B82F6, #2563EB); }
+        .btn.danger { background: linear-gradient(135deg, #EF4444, #DC2626); }
+        .btn.secondary { background: rgba(243,244,246,0.95); color: #1F2937; }
+        .btn.cloud { background: linear-gradient(135deg, #8B5CF6, #7C3AED); }
+        .btn.warning { background: linear-gradient(135deg, #F59E0B, #D97706); }
+        .btn.print { background: linear-gradient(135deg, #6366F1, #4F46E5); }
+        .btn.usb { background: linear-gradient(135deg, #EC4899, #DB2777); }
         
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .btn.primary { 
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
-        .btn.success { 
-            background: linear-gradient(135deg, #10B981, #059669);
-        }
-        .btn.info { 
-            background: linear-gradient(135deg, #3B82F6, #2563EB);
-        }
-        .btn.danger { 
-            background: linear-gradient(135deg, #EF4444, #DC2626);
-        }
-        .btn.secondary { 
-            background: rgba(243,244,246,0.95);
-            color: #1F2937;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        .btn.cloud { 
-            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
-        }
-        .btn.warning { 
-            background: linear-gradient(135deg, #F59E0B, #D97706);
-        }
-        .btn.print { 
-            background: linear-gradient(135deg, #6366F1, #4F46E5);
-        }
-        .btn.usb { 
-            background: linear-gradient(135deg, #EC4899, #DB2777);
-        }
-        
-        .btn:disabled { 
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .btn:active:not(:disabled) { 
-            transform: scale(0.96);
-        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn:active:not(:disabled) { transform: scale(0.96); }
         .btn:hover:not(:disabled) {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
         
@@ -431,7 +268,6 @@
             border-color: #667eea;
             box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
             background: white;
-            transform: translateY(-2px);
         }
         
         input[type="file"] { display: none; }
@@ -452,23 +288,6 @@
             justify-content: center;
             align-items: center;
             min-height: 200px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .preview::before {
-            content: '';
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(102,126,234,0.1) 10%, transparent 10%);
-            background-size: 20px 20px;
-            animation: movePreview 15s linear infinite;
-        }
-        
-        @keyframes movePreview {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(20px, 20px); }
         }
         
         .label {
@@ -485,8 +304,6 @@
             background: white;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             border-radius: 4px;
-            position: relative;
-            z-index: 1;
             transition: all 0.3s ease;
         }
         
@@ -529,12 +346,6 @@
             font-size: 13px;
             font-weight: 700;
             box-shadow: 0 4px 15px rgba(102,126,234,0.3);
-            animation: bounce 1s ease infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
         }
         
         .slider {
@@ -544,24 +355,6 @@
             background: linear-gradient(to right, #667eea, #764ba2, #f093fb);
             border-radius: 10px;
             outline: none;
-            position: relative;
-        }
-        
-        .slider::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            border-radius: 10px;
-            animation: shimmer 2s linear infinite;
-        }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
         }
         
         .slider::-webkit-slider-thumb {
@@ -578,7 +371,6 @@
         
         .slider::-webkit-slider-thumb:hover {
             transform: scale(1.2);
-            box-shadow: 0 6px 20px rgba(102,126,234,0.6);
         }
         
         .slider::-moz-range-thumb {
@@ -594,7 +386,6 @@
         
         .slider::-moz-range-thumb:hover {
             transform: scale(1.2);
-            box-shadow: 0 6px 20px rgba(102,126,234,0.6);
         }
         
         .toggle {
@@ -612,7 +403,7 @@
             font-weight: 700;
             color: #6b7280;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
         }
         
         .toggle button.active {
@@ -639,7 +430,6 @@
         .empty-icon {
             font-size: 60px;
             margin-bottom: 16px;
-            animation: float 3s ease-in-out infinite;
         }
         
         .toast {
@@ -653,20 +443,8 @@
             padding: 16px;
             border-radius: 16px;
             z-index: 1000;
-            animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             font-weight: 600;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-        
-        @keyframes slideInUp {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
         }
         
         .toast.success { 
@@ -693,7 +471,6 @@
 
         .cloud-status .icon { 
             font-size: 20px;
-            animation: float 3s ease-in-out infinite;
         }
 
         .file-row {
@@ -768,7 +545,6 @@
 
         .selection-bar.visible {
             display: flex;
-            animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .selection-info {
@@ -796,12 +572,12 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
 
         .selection-actions button:hover {
-            transform: translateY(-3px) scale(1.05);
+            transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.2);
         }
 
@@ -984,7 +760,7 @@
             
             <div class="usb-info">
                 <strong>⚡ Прямая печать через USB!</strong><br>
-                Работает только в Chrome/Edge. Подключи Xprinter XP-365B через USB и нажми "Подключить".
+                Работает только в Chrome/Edge. Печатает бирку как картинку - русский текст будет читаемым!
             </div>
             
             <div class="usb-status disconnected" id="usbStatus">
@@ -992,7 +768,7 @@
             </div>
             
             <button class="btn usb" id="usbConnectBtn">🔌 Подключить USB принтер</button>
-            <button class="btn usb" id="usbPrintBtn" disabled>⚡ Печать через USB (TSPL)</button>
+            <button class="btn usb" id="usbPrintBtn" disabled>⚡ Печать через USB (Картинка)</button>
         </div>
 
         <div class="section">
@@ -1387,7 +1163,7 @@ L=50м"></textarea>
             document.getElementById('v4').textContent = pt + 'мм';
         }
 
-        // ====== USB ПЕЧАТЬ TSPL С TTF ШРИФТОМ ======
+        // ====== USB ПЕЧАТЬ ЧЕРЕЗ BITMAP ======
         
         async function connectUSB() {
             if (!navigator.usb) {
@@ -1452,50 +1228,6 @@ L=50м"></textarea>
             }
         }
         
-        function generateTSPL(label) {
-            let cmd = '';
-            
-            // Настройка для бирки 40x30мм
-            cmd += 'SIZE 40 mm, 30 mm\r\n';
-            cmd += 'GAP 2 mm, 0 mm\r\n';
-            cmd += 'DIRECTION 0\r\n';
-            cmd += 'REFERENCE 0,0\r\n';
-            cmd += 'OFFSET 0 mm\r\n';
-            cmd += 'SET TEAR ON\r\n';
-            cmd += 'CLS\r\n';
-            
-            // Координаты с хорошими отступами
-            let y = 5;
-            const leftMargin = 5;
-            
-            // Первая строка - крупнее
-            if (label.line1) {
-                cmd += `TEXT ${leftMargin},${y},"4",0,1,1,"${label.line1}"\r\n`;
-                y += 28;
-            }
-            
-            // Остальные строки - мельче
-            if (label.line2) {
-                cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line2}"\r\n`;
-                y += 23;
-            }
-            if (label.line3) {
-                cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line3}"\r\n`;
-                y += 23;
-            }
-            if (label.line4) {
-                cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line4}"\r\n`;
-                y += 23;
-            }
-            if (label.line5) {
-                cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line5}"\r\n`;
-            }
-            
-            cmd += 'PRINT 1,1\r\n';
-            
-            return cmd;
-        }
-        
         async function printUSB() {
             if (!usbDevice) {
                 toast('❌ Сначала подключи принтер!', 'error');
@@ -1505,25 +1237,32 @@ L=50м"></textarea>
             if (idx < 0) return;
             
             try {
-                const label = {
-                    line1: document.getElementById('l1').value,
-                    line2: document.getElementById('l2').value,
-                    line3: document.getElementById('l3').value,
-                    line4: document.getElementById('l4').value,
-                    line5: document.getElementById('l5').value
-                };
+                // Создаём временную бирку для рендера
+                const canvas = await html2canvas(document.getElementById('preview'), {
+                    scale: 2,
+                    backgroundColor: '#ffffff'
+                });
                 
-                const printerCmd = generateTSPL(label);
-                console.log('TSPL команда:', printerCmd);
+                // Конвертируем в чёрно-белый bitmap
+                const bitmapData = canvasToBitmap(canvas);
                 
-                // Отправляем как UTF-8
+                // Генерируем TSPL команды
+                let cmd = '';
+                cmd += 'SIZE 40 mm, 30 mm\r\n';
+                cmd += 'GAP 2 mm, 0 mm\r\n';
+                cmd += 'DIRECTION 0\r\n';
+                cmd += 'CLS\r\n';
+                cmd += `BITMAP 0,0,${bitmapData.width},${bitmapData.height},1,${bitmapData.data}\r\n`;
+                cmd += 'PRINT 1,1\r\n';
+                
+                console.log('TSPL команда с BITMAP:', cmd.substring(0, 200) + '...');
+                
                 const encoder = new TextEncoder();
-                const data = encoder.encode(printerCmd);
-                console.log('Байты (UTF-8):', data);
+                const data = encoder.encode(cmd);
                 
                 await usbDevice.transferOut(usbEndpoint, data);
                 
-                toast('⚡ Отправлено на принтер!', 'success');
+                toast('⚡ Отправлено на принтер (картинка)!', 'success');
                 
             } catch (error) {
                 console.error('Ошибка печати:', error);
@@ -1543,17 +1282,35 @@ L=50м"></textarea>
             }
             
             try {
-                let allCommands = '';
                 const sortedIndices = Array.from(selectedIndices).sort((a, b) => a - b);
                 
-                sortedIndices.forEach(i => {
+                for (const i of sortedIndices) {
                     const label = filtered[i];
-                    allCommands += generateTSPL(label);
-                });
-                
-                const encoder = new TextEncoder();
-                const data = encoder.encode(allCommands);
-                await usbDevice.transferOut(usbEndpoint, data);
+                    const tempDiv = await createTempLabel(label);
+                    
+                    const canvas = await html2canvas(tempDiv.firstElementChild, {
+                        scale: 2,
+                        backgroundColor: '#ffffff'
+                    });
+                    
+                    document.body.removeChild(tempDiv);
+                    
+                    const bitmapData = canvasToBitmap(canvas);
+                    
+                    let cmd = '';
+                    cmd += 'SIZE 40 mm, 30 mm\r\n';
+                    cmd += 'GAP 2 mm, 0 mm\r\n';
+                    cmd += 'DIRECTION 0\r\n';
+                    cmd += 'CLS\r\n';
+                    cmd += `BITMAP 0,0,${bitmapData.width},${bitmapData.height},1,${bitmapData.data}\r\n`;
+                    cmd += 'PRINT 1,1\r\n';
+                    
+                    const encoder = new TextEncoder();
+                    const data = encoder.encode(cmd);
+                    await usbDevice.transferOut(usbEndpoint, data);
+                    
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
                 
                 toast(`⚡ Напечатано ${selectedIndices.size} бирок!`, 'success');
                 
@@ -1563,6 +1320,74 @@ L=50м"></textarea>
             }
         }
 
+        function canvasToBitmap(canvas) {
+            const ctx = canvas.getContext('2d');
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            const width = canvas.width;
+            const height = canvas.height;
+            const bytesPerRow = Math.ceil(width / 8);
+            
+            let bitmapHex = '';
+            
+            for (let y = 0; y < height; y++) {
+                let rowBits = '';
+                for (let x = 0; x < width; x++) {
+                    const idx = (y * width + x) * 4;
+                    const r = data[idx];
+                    const g = data[idx + 1];
+                    const b = data[idx + 2];
+                    const brightness = (r + g + b) / 3;
+                    rowBits += brightness < 128 ? '1' : '0';
+                }
+                
+                // Дополняем до кратности 8
+                while (rowBits.length % 8 !== 0) {
+                    rowBits += '0';
+                }
+                
+                // Конвертируем биты в hex
+                for (let i = 0; i < rowBits.length; i += 8) {
+                    const byte = rowBits.substring(i, i + 8);
+                    const hex = parseInt(byte, 2).toString(16).padStart(2, '0');
+                    bitmapHex += hex;
+                }
+            }
+            
+            return {
+                width: width,
+                height: height,
+                data: bitmapHex
+            };
+        }
+
+        async function createTempLabel(label) {
+            const pt = parseFloat(document.getElementById('s4').value);
+            const lh = parseFloat(document.getElementById('s3').value);
+            const f1 = parseFloat(document.getElementById('s1').value);
+            const f2 = parseFloat(document.getElementById('s2').value);
+            
+            const tempDiv = document.createElement('div');
+            tempDiv.style.position = 'absolute';
+            tempDiv.style.left = '-9999px';
+            
+            tempDiv.innerHTML = `
+                <div class="label" style="padding-top:${pt}mm;line-height:${lh};width:40mm;height:30mm;border:2px solid #000;display:flex;flex-direction:column;justify-content:center;text-align:center;padding-left:2mm;padding-right:2mm;background:white;font-size:10pt;">
+                    <div style="font-size:${f1}pt;font-weight:${w1}">${label.line1 || ''}</div>
+                    <div style="font-size:${f2}pt;font-weight:${w2}">${label.line2 || ''}</div>
+                    <div style="font-size:${f2}pt;font-weight:${w2}">${label.line3 || ''}</div>
+                    <div style="font-size:${f2}pt;font-weight:${w2}">${label.line4 || ''}</div>
+                    <div style="font-size:${f2}pt;font-weight:${w2}">${label.line5 || ''}</div>
+                </div>
+            `;
+            document.body.appendChild(tempDiv);
+            
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            return tempDiv;
+        }
+
         // ====== PNG/PDF ЭКСПОРТ ======
 
         async function exportPNG() {
@@ -1570,10 +1395,8 @@ L=50м"></textarea>
             
             try {
                 const canvas = await html2canvas(document.getElementById('preview'), {
-                    scale: 4,
-                    backgroundColor: '#ffffff',
-                    width: 151,
-                    height: 113
+                    scale: 2,
+                    backgroundColor: '#ffffff'
                 });
                 
                 const l = document.getElementById('l1').value;
@@ -1599,30 +1422,10 @@ L=50м"></textarea>
                 
                 for (const i of sortedIndices) {
                     const label = filtered[i];
-                    const tempDiv = document.createElement('div');
-                    tempDiv.style.position = 'absolute';
-                    tempDiv.style.left = '-9999px';
-                    
-                    const pt = parseFloat(document.getElementById('s4').value);
-                    const lh = parseFloat(document.getElementById('s3').value);
-                    const f1 = parseFloat(document.getElementById('s1').value);
-                    const f2 = parseFloat(document.getElementById('s2').value);
-                    
-                    tempDiv.innerHTML = `
-                        <div class="label" style="padding-top:${pt}mm;line-height:${lh};width:40mm;height:30mm;border:2px solid #000;display:flex;flex-direction:column;justify-content:center;text-align:center;padding-left:2mm;padding-right:2mm;background:white;font-size:10pt;">
-                            <div style="font-size:${f1}pt;font-weight:${w1}">${label.line1 || ''}</div>
-                            <div style="font-size:${f2}pt;font-weight:${w2}">${label.line2 || ''}</div>
-                            <div style="font-size:${f2}pt;font-weight:${w2}">${label.line3 || ''}</div>
-                            <div style="font-size:${f2}pt;font-weight:${w2}">${label.line4 || ''}</div>
-                            <div style="font-size:${f2}pt;font-weight:${w2}">${label.line5 || ''}</div>
-                        </div>
-                    `;
-                    document.body.appendChild(tempDiv);
-                    
-                    await new Promise(resolve => setTimeout(resolve, 100));
+                    const tempDiv = await createTempLabel(label);
                     
                     const canvas = await html2canvas(tempDiv.firstElementChild, {
-                        scale: 4,
+                        scale: 2,
                         backgroundColor: '#ffffff'
                     });
                     
@@ -1650,18 +1453,18 @@ L=50м"></textarea>
             try {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({
-                    orientation: 'portrait',
+                    orientation: 'landscape',
                     unit: 'mm',
-                    format: [30, 40]
+                    format: [40, 30]
                 });
 
                 const canvas = await html2canvas(document.getElementById('preview'), {
-                    scale: 4,
+                    scale: 2,
                     backgroundColor: '#ffffff'
                 });
 
                 const imgData = canvas.toDataURL('image/png');
-                pdf.addImage(imgData, 'PNG', 0, 0, 30, 40);
+                pdf.addImage(imgData, 'PNG', 0, 0, 40, 30);
                 
                 const l = document.getElementById('l1').value;
                 pdf.save(`emil_birka_${l.replace(/[^a-zA-Z0-9]/g,'_')}.pdf`);
@@ -1681,15 +1484,10 @@ L=50м"></textarea>
             try {
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF({
-                    orientation: 'portrait',
+                    orientation: 'landscape',
                     unit: 'mm',
-                    format: [30, 40]
+                    format: [40, 30]
                 });
-
-                const f1 = parseFloat(document.getElementById('s1').value);
-                const f2 = parseFloat(document.getElementById('s2').value);
-                const lh = parseFloat(document.getElementById('s3').value);
-                const pt = parseFloat(document.getElementById('s4').value);
 
                 let isFirst = true;
                 const sortedIndices = Array.from(selectedIndices).sort((a, b) => a - b);
@@ -1701,30 +1499,15 @@ L=50м"></textarea>
                     isFirst = false;
 
                     const label = filtered[i];
-                    const tempDiv = document.createElement('div');
-                    tempDiv.style.position = 'absolute';
-                    tempDiv.style.left = '-9999px';
-                    
-                    tempDiv.innerHTML = `
-                        <div class="label" style="padding-top:${pt}mm;line-height:${lh};width:40mm;height:30mm;border:2px solid #000;display:flex;flex-direction:column;justify-content:center;text-align:center;padding-left:2mm;padding-right:2mm;background:white;font-size:10pt;">
-                            <div style="font-size:${f1}pt;font-weight:${w1}">${label.line1 || ''}</div>
-                            <div style="font-size:${f2}pt;font-weight:${w2}">${label.line2 || ''}</div>
-                            <div style="font-size:${f2}pt;font-weight:${w2}">${label.line3 || ''}</div>
-                            <div style="font-size:${f2}pt;font-weight:${w2}">${label.line4 || ''}</div>
-                            <div style="font-size:${f2}pt;font-weight:${w2}">${label.line5 || ''}</div>
-                        </div>
-                    `;
-                    document.body.appendChild(tempDiv);
-
-                    await new Promise(resolve => setTimeout(resolve, 50));
+                    const tempDiv = await createTempLabel(label);
 
                     const canvas = await html2canvas(tempDiv.firstElementChild, {
-                        scale: 4,
+                        scale: 2,
                         backgroundColor: '#ffffff'
                     });
 
                     const imgData = canvas.toDataURL('image/png');
-                    pdf.addImage(imgData, 'PNG', 0, 0, 30, 40);
+                    pdf.addImage(imgData, 'PNG', 0, 0, 40, 30);
 
                     document.body.removeChild(tempDiv);
                 }
