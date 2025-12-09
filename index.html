@@ -1501,45 +1501,55 @@ L=50м"></textarea>
             return cmd;
         }
         
-        // ПРОТОКОЛ 2: TSPL (Xprinter, TSC)
-        function generateTSPL(label) {
-            let cmd = '';
-            
-            cmd += 'SIZE 40 mm, 30 mm\r\n';
-            cmd += 'GAP 2 mm, 0 mm\r\n';
-            cmd += 'DIRECTION 0\r\n';
-            cmd += 'REFERENCE 0,0\r\n';
-            cmd += 'CLS\r\n';
-            
-            let y = 20;
-            
-            // Первая строка
-            if (label.line1) {
-                cmd += `TEXT 20,${y},"3",0,1,1,"${label.line1}"\r\n`;
-                y += 40;
-            }
-            
-            // Остальные строки
-            if (label.line2) {
-                cmd += `TEXT 20,${y},"2",0,1,1,"${label.line2}"\r\n`;
-                y += 30;
-            }
-            if (label.line3) {
-                cmd += `TEXT 20,${y},"2",0,1,1,"${label.line3}"\r\n`;
-                y += 30;
-            }
-            if (label.line4) {
-                cmd += `TEXT 20,${y},"2",0,1,1,"${label.line4}"\r\n`;
-                y += 30;
-            }
-            if (label.line5) {
-                cmd += `TEXT 20,${y},"2",0,1,1,"${label.line5}"\r\n`;
-            }
-            
-            cmd += 'PRINT 1\r\n';
-            
-            return cmd;
-        }
+       // ПРОТОКОЛ 2: TSPL (Xprinter, TSC)
+function generateTSPL(label) {
+    let cmd = '';
+    
+    // Настройка размера бирки
+    cmd += 'SIZE 40 mm, 30 mm\r\n';
+    cmd += 'GAP 2 mm, 0 mm\r\n';
+    cmd += 'DIRECTION 0,0\r\n';
+    cmd += 'REFERENCE 0,0\r\n';
+    cmd += 'OFFSET 0 mm\r\n';
+    cmd += 'SET PEEL OFF\r\n';
+    cmd += 'SET CUTTER OFF\r\n';
+    cmd += 'SET PARTIAL_CUTTER OFF\r\n';
+    cmd += 'SET TEAR ON\r\n';
+    cmd += 'CLS\r\n';
+    
+    // Координаты для центрирования
+    let y = 30;
+    const centerX = 100;
+    
+    // Первая строка (крупная, жирная)
+    if (label.line1) {
+        cmd += `TEXT ${centerX},${y},"4",0,2,2,"${label.line1}"\r\n`;
+        y += 50;
+    }
+    
+    // Остальные строки (обычный размер)
+    if (label.line2) {
+        cmd += `TEXT ${centerX},${y},"3",0,1,1,"${label.line2}"\r\n`;
+        y += 35;
+    }
+    if (label.line3) {
+        cmd += `TEXT ${centerX},${y},"3",0,1,1,"${label.line3}"\r\n`;
+        y += 35;
+    }
+    if (label.line4) {
+        cmd += `TEXT ${centerX},${y},"3",0,1,1,"${label.line4}"\r\n`;
+        y += 35;
+    }
+    if (label.line5) {
+        cmd += `TEXT ${centerX},${y},"3",0,1,1,"${label.line5}"\r\n`;
+    }
+    
+    cmd += 'PRINT 1,1\r\n';
+    cmd += 'END\r\n';
+    
+    return cmd;
+}
+
         
         // ПРОТОКОЛ 3: ZPL (Zebra)
         function generateZPL(label) {
