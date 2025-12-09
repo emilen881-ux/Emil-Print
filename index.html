@@ -237,28 +237,39 @@ async function printUSB(){
   }
 }
 
-// PDF экспорт (портретная ориентация 30×40мм)
+// PDF экспорт с поворотом
 async function exportPDF(){
   try{
+    // Рендерим превью 40×30мм (альбомная)
     const canvas=await html2canvas(document.getElementById('preview'),{
       scale:3,
       backgroundColor:'#ffffff'
     });
     
-    const {jsPDF}=window.jspdf;
+    // Создаём новый canvas повёрнутый на 90° (30×40мм портретная)
+    const rotated=document.createElement('canvas');
+    rotated.width=canvas.height;  // меняем местами
+    rotated.height=canvas.width;
     
-    // ПОРТРЕТНАЯ ориентация: 30mm (ширина) × 40mm (высота)
+    const ctx=rotated.getContext('2d');
+    ctx.fillStyle='#ffffff';
+    ctx.fillRect(0,0,rotated.width,rotated.height);
+    
+    // Поворачиваем на 90° по часовой
+    ctx.translate(rotated.width/2,rotated.height/2);
+    ctx.rotate(90*Math.PI/180);
+    ctx.drawImage(canvas,-canvas.width/2,-canvas.height/2);
+    
+    // Создаём PDF портретный 30×40мм
+    const {jsPDF}=window.jspdf;
     const pdf=new jsPDF({
       orientation:'portrait',
       unit:'mm',
       format:[30,40]
     });
     
-    // Поворачиваем изображение на 90° и вписываем в 30×40
-    const imgData=canvas.toDataURL('image/png');
-    
-    // Картинка 40×30, PDF 30×40 — нужно повернуть на 90°
-    pdf.addImage(imgData,'PNG',0,0,30,40,undefined,'FAST',90);
+    const imgData=rotated.toDataURL('image/png');
+    pdf.addImage(imgData,'PNG',0,0,30,40);
     
     pdf.save('birka.pdf');
     alert('✅ PDF сохранён!');
