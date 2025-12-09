@@ -1478,44 +1478,50 @@ L=50м"></textarea>
             }
         }
         
-        function generateTSPL(label) {
-            let cmd = '';
-            
-            cmd += 'SIZE 40 mm, 30 mm\r\n';
-            cmd += 'GAP 2 mm, 0 mm\r\n';
-            cmd += 'DIRECTION 0\r\n';
-            cmd += 'REFERENCE 0,0\r\n';
-            cmd += 'COUNTRY 007\r\n';
-            cmd += 'CODEPAGE 866\r\n';
-            cmd += 'CLS\r\n';
-            
-            let y = 20;
-            
-            if (label.line1) {
-                cmd += `TEXT 20,${y},"4",0,2,2,"${label.line1}"\r\n`;
-                y += 45;
-            }
-            
-            if (label.line2) {
-                cmd += `TEXT 20,${y},"3",0,1,1,"${label.line2}"\r\n`;
-                y += 30;
-            }
-            if (label.line3) {
-                cmd += `TEXT 20,${y},"3",0,1,1,"${label.line3}"\r\n`;
-                y += 30;
-            }
-            if (label.line4) {
-                cmd += `TEXT 20,${y},"3",0,1,1,"${label.line4}"\r\n`;
-                y += 30;
-            }
-            if (label.line5) {
-                cmd += `TEXT 20,${y},"3",0,1,1,"${label.line5}"\r\n`;
-            }
-            
-            cmd += 'PRINT 1,1\r\n';
-            
-            return cmd;
-        }
+       function generateTSPL(label) {
+    let cmd = '';
+    
+    // Настройка для 40x30 мм
+    cmd += 'SIZE 40 mm, 30 mm\r\n';
+    cmd += 'GAP 2 mm, 0 mm\r\n';
+    cmd += 'DIRECTION 0\r\n';
+    cmd += 'REFERENCE 0,0\r\n';
+    cmd += 'COUNTRY 007\r\n';
+    cmd += 'CODEPAGE 866\r\n';
+    cmd += 'CLS\r\n';
+    
+    // Начальная позиция с отступом сверху
+    let y = 10;
+    const leftMargin = 10;  // Отступ слева
+    
+    // Первая строка (меньше размер, чтобы влезла)
+    if (label.line1) {
+        cmd += `TEXT ${leftMargin},${y},"3",0,1,1,"${label.line1}"\r\n`;
+        y += 25;
+    }
+    
+    // Остальные строки (мелкий шрифт)
+    if (label.line2) {
+        cmd += `TEXT ${leftMargin},${y},"2",0,1,1,"${label.line2}"\r\n`;
+        y += 20;
+    }
+    if (label.line3) {
+        cmd += `TEXT ${leftMargin},${y},"2",0,1,1,"${label.line3}"\r\n`;
+        y += 20;
+    }
+    if (label.line4) {
+        cmd += `TEXT ${leftMargin},${y},"2",0,1,1,"${label.line4}"\r\n`;
+        y += 20;
+    }
+    if (label.line5) {
+        cmd += `TEXT ${leftMargin},${y},"2",0,1,1,"${label.line5}"\r\n`;
+    }
+    
+    cmd += 'PRINT 1,1\r\n';
+    
+    return cmd;
+}
+
         
         async function printUSB() {
             if (!usbDevice) {
