@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Эмиль Бирки — с русским</title>
+  <title>Эмиль Бирки — CP866</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
     body{
@@ -119,10 +119,10 @@
 </head>
 <body>
 <div class="app">
-  <h1>🏷️ Эмиль Бирки — TSPL + Русский</h1>
+  <h1>🏷️ Эмиль Бирки — TSPL CP866</h1>
 
   <div class="hint">
-    ✅ Теперь можно русский! Печатает через Windows-1251 кодировку.
+    ✅ Кодировка CP866 (DOS) для XP-365B
   </div>
 
   <div class="preview-wrap">
@@ -182,7 +182,7 @@
     <button class="btn btn-disconnect" id="usbDisconnectBtn" disabled>🔌 Отключить</button>
   </div>
   
-  <button class="btn btn-usb" id="usbPrintBtn" disabled>⚡ Печать через USB (TSPL + Win-1251)</button>
+  <button class="btn btn-usb" id="usbPrintBtn" disabled>⚡ Печать через USB (TSPL + CP866)</button>
 
   <div class="row">
     <button class="btn btn-primary" id="pdfBtn">📄 PDF</button>
@@ -227,22 +227,23 @@ function updateSliderValues(){
 updatePreview();
 updateSliderValues();
 
-// Таблица конвертации UTF-8 → Windows-1251
-const win1251Map={
-  'А':0xC0,'Б':0xC1,'В':0xC2,'Г':0xC3,'Д':0xC4,'Е':0xC5,'Ё':0xA8,'Ж':0xC6,'З':0xC7,'И':0xC8,'Й':0xC9,
-  'К':0xCA,'Л':0xCB,'М':0xCC,'Н':0xCD,'О':0xCE,'П':0xCF,'Р':0xD0,'С':0xD1,'Т':0xD2,'У':0xD3,'Ф':0xD4,
-  'Х':0xD5,'Ц':0xD6,'Ч':0xD7,'Ш':0xD8,'Щ':0xD9,'Ъ':0xDA,'Ы':0xDB,'Ь':0xDC,'Э':0xDD,'Ю':0xDE,'Я':0xDF,
-  'а':0xE0,'б':0xE1,'в':0xE2,'г':0xE3,'д':0xE4,'е':0xE5,'ё':0xB8,'ж':0xE6,'з':0xE7,'и':0xE8,'й':0xE9,
-  'к':0xEA,'л':0xEB,'м':0xEC,'н':0xED,'о':0xEE,'п':0xEF,'р':0xF0,'с':0xF1,'т':0xF2,'у':0xF3,'ф':0xF4,
-  'х':0xF5,'ц':0xF6,'ч':0xF7,'ш':0xF8,'щ':0xF9,'ъ':0xFA,'ы':0xFB,'ь':0xFC,'э':0xFD,'ю':0xFE,'я':0xFF
+// Таблица конвертации UTF-8 → CP866 (DOS кириллица)
+const cp866Map={
+  'А':0x80,'Б':0x81,'В':0x82,'Г':0x83,'Д':0x84,'Е':0x85,'Ж':0x86,'З':0x87,'И':0x88,'Й':0x89,
+  'К':0x8A,'Л':0x8B,'М':0x8C,'Н':0x8D,'О':0x8E,'П':0x8F,'Р':0x90,'С':0x91,'Т':0x92,'У':0x93,
+  'Ф':0x94,'Х':0x95,'Ц':0x96,'Ч':0x97,'Ш':0x98,'Щ':0x99,'Ъ':0x9A,'Ы':0x9B,'Ь':0x9C,'Э':0x9D,
+  'Ю':0x9E,'Я':0x9F,'а':0xA0,'б':0xA1,'в':0xA2,'г':0xA3,'д':0xA4,'е':0xA5,'ж':0xA6,'з':0xA7,
+  'и':0xA8,'й':0xA9,'к':0xAA,'л':0xAB,'м':0xAC,'н':0xAD,'о':0xAE,'п':0xAF,'р':0xE0,'с':0xE1,
+  'т':0xE2,'у':0xE3,'ф':0xE4,'х':0xE5,'ц':0xE6,'ч':0xE7,'ш':0xE8,'щ':0xE9,'ъ':0xEA,'ы':0xEB,
+  'ь':0xEC,'э':0xED,'ю':0xEE,'я':0xEF,'Ё':0xF0,'ё':0xF1
 };
 
-function toWin1251(str){
+function toCP866(str){
   const arr=[];
   for(let i=0;i<str.length;i++){
     const ch=str[i];
-    if(win1251Map[ch]!==undefined){
-      arr.push(win1251Map[ch]);
+    if(cp866Map[ch]!==undefined){
+      arr.push(cp866Map[ch]);
     }else{
       arr.push(ch.charCodeAt(0)&0xFF);
     }
@@ -250,7 +251,7 @@ function toWin1251(str){
   return new Uint8Array(arr);
 }
 
-// --- TSPL команда с Win-1251 ---
+// --- TSPL команда с CP866 ---
 function buildTSPL(){
   const l1=document.getElementById('l1').value;
   const l2=document.getElementById('l2').value;
@@ -271,7 +272,7 @@ function buildTSPL(){
   cmdHeader+='GAP 2 mm,0 mm\r\n';
   cmdHeader+=`DIRECTION ${dir}\r\n`;
   cmdHeader+='REFERENCE 0,0\r\n';
-  cmdHeader+='CODEPAGE 1251\r\n';  // ← ВАЖНО для русского
+  cmdHeader+='CODEPAGE 866\r\n';  // CP866 для русского
   cmdHeader+='CLS\r\n';
 
   const headerBytes=[];
@@ -292,17 +293,15 @@ function buildTSPL(){
   lines.forEach(line=>{
     if(!line.text) return;
     
-    // TEXT x,y,"font",rotation,x-mul,y-mul,"text"
     const prefix=`TEXT ${xLeft},${y},"${line.font}",0,1,1,"`;
     for(let i=0;i<prefix.length;i++){
       bodyBytes.push(prefix.charCodeAt(i));
     }
     
-    // Текст в Win-1251
-    const textBytes=toWin1251(line.text);
+    // Текст в CP866
+    const textBytes=toCP866(line.text);
     bodyBytes.push(...textBytes);
     
-    // Закрывающая кавычка и перенос
     bodyBytes.push(34); // "
     bodyBytes.push(13); // \r
     bodyBytes.push(10); // \n
@@ -315,7 +314,6 @@ function buildTSPL(){
     bodyBytes.push(footer.charCodeAt(i));
   }
 
-  // Объединяем всё
   return new Uint8Array([...headerBytes,...bodyBytes]);
 }
 
