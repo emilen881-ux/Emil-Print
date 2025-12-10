@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#5eead4">
+    <meta name="theme-color" content="#667eea">
     <title>Эмиль Бирки</title>
     <style>
         * {
@@ -16,10 +16,18 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #5eead4 0%, #2dd4bf 30%, #14b8a6 60%, #0d9488 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #667eea 75%, #764ba2 100%);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         body::before {
@@ -29,7 +37,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
             background-size: 50px 50px;
             animation: moveBackground 20s linear infinite;
             pointer-events: none;
@@ -42,17 +50,18 @@
         }
         
         .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
             padding: 12px 16px;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
             position: sticky;
             top: 0;
             z-index: 100;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 0.5px solid rgba(255,255,255,0.3);
         }
         
         .logo {
@@ -76,13 +85,13 @@
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
-            box-shadow: 0 4px 15px rgba(94,234,212,0.4);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
             animation: float 3s ease-in-out infinite;
         }
         
@@ -94,7 +103,7 @@
         .header h1 {
             font-size: 20px;
             font-weight: 800;
-            background: linear-gradient(135deg, #5eead4, #2dd4bf, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -108,13 +117,13 @@
         }
         
         .stats {
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(94,234,212,0.4);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
             animation: pulse 2s ease-in-out infinite;
         }
         
@@ -125,13 +134,14 @@
         
         .tabs {
             display: flex;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
             position: sticky;
             top: 60px;
             z-index: 99;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
-            border-bottom: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.08);
+            border-bottom: 0.5px solid rgba(255,255,255,0.3);
         }
         
         .tab {
@@ -155,14 +165,14 @@
             left: 50%;
             width: 0;
             height: 3px;
-            background: linear-gradient(90deg, #5eead4, #14b8a6);
+            background: linear-gradient(90deg, #667eea, #764ba2);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             transform: translateX(-50%);
         }
         
         .tab.active {
-            color: #14b8a6;
-            background: linear-gradient(to bottom, rgba(94,234,212,0.08), transparent);
+            color: #667eea;
+            background: linear-gradient(to bottom, rgba(102,126,234,0.05), transparent);
         }
         
         .tab.active::after {
@@ -194,36 +204,37 @@
         }
         
         .search {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
             border-radius: 16px;
             padding: 14px;
             margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border: 0.5px solid rgba(255,255,255,0.3);
             transition: all 0.3s ease;
         }
         
         .search:hover {
-            box-shadow: 0 12px 40px rgba(94,234,212,0.2);
+            box-shadow: 0 12px 40px rgba(102,126,234,0.15);
             transform: translateY(-2px);
         }
         
         .search input {
             width: 100%;
             padding: 14px;
-            border: 2px solid rgba(94,234,212,0.2);
+            border: 2px solid rgba(102,126,234,0.1);
             border-radius: 12px;
             font-size: 15px;
             transition: all 0.3s ease;
-            background: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.5);
         }
         
         .search input:focus {
             outline: none;
-            border-color: #5eead4;
-            box-shadow: 0 0 0 4px rgba(94,234,212,0.15);
-            background: white;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+            background: rgba(255,255,255,0.9);
         }
         
         .grid {
@@ -232,17 +243,18 @@
         }
         
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
             border-radius: 16px;
             padding: 16px;
             cursor: pointer;
-            border: 2px solid rgba(255,255,255,0.3);
+            border: 0.5px solid rgba(255,255,255,0.3);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             gap: 12px;
             align-items: start;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
             position: relative;
             overflow: hidden;
         }
@@ -254,7 +266,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(94,234,212,0.15), transparent);
+            background: linear-gradient(90deg, transparent, rgba(102,126,234,0.1), transparent);
             transition: left 0.5s ease;
         }
         
@@ -264,14 +276,15 @@
         
         .card:hover {
             transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(94,234,212,0.25);
-            border-color: #5eead4;
+            box-shadow: 0 12px 40px rgba(102,126,234,0.15);
+            border-color: rgba(102,126,234,0.3);
+            background: rgba(255, 255, 255, 0.85);
         }
         
         .card.selected {
-            border-color: #14b8a6;
-            box-shadow: 0 8px 30px rgba(20,184,166,0.3);
-            background: linear-gradient(to right, rgba(94,234,212,0.12), rgba(255,255,255,0.95));
+            border-color: #667eea;
+            box-shadow: 0 8px 30px rgba(102,126,234,0.25);
+            background: linear-gradient(to right, rgba(102,126,234,0.1), rgba(255,255,255,0.85));
         }
         
         .card-left {
@@ -286,7 +299,7 @@
             height: 24px;
             min-width: 24px;
             cursor: pointer;
-            accent-color: #14b8a6;
+            accent-color: #667eea;
         }
         
         .quantity-control {
@@ -299,12 +312,12 @@
         .quantity-btn {
             width: 28px;
             height: 28px;
-            border: 2px solid #5eead4;
-            background: white;
+            border: 2px solid #667eea;
+            background: rgba(255,255,255,0.8);
             border-radius: 8px;
             font-size: 16px;
             font-weight: 700;
-            color: #14b8a6;
+            color: #667eea;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
@@ -314,7 +327,7 @@
         }
         
         .quantity-btn:hover {
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             transform: scale(1.1);
         }
@@ -326,7 +339,7 @@
         .quantity-display {
             width: 28px;
             height: 28px;
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border-radius: 8px;
             display: flex;
@@ -334,7 +347,7 @@
             justify-content: center;
             font-size: 13px;
             font-weight: 700;
-            box-shadow: 0 2px 8px rgba(94,234,212,0.3);
+            box-shadow: 0 2px 8px rgba(102,126,234,0.3);
         }
         
         .card-content {
@@ -355,13 +368,14 @@
         }
         
         .section {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(30px) saturate(180%);
+            -webkit-backdrop-filter: blur(30px) saturate(180%);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 16px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+            border: 0.5px solid rgba(255,255,255,0.3);
             transition: all 0.3s ease;
             animation: slideUp 0.6s ease-out;
         }
@@ -378,7 +392,7 @@
         }
         
         .section:hover {
-            box-shadow: 0 12px 40px rgba(94,234,212,0.2);
+            box-shadow: 0 12px 40px rgba(102,126,234,0.12);
             transform: translateY(-2px);
         }
         
@@ -387,7 +401,7 @@
             font-weight: 800;
             margin-bottom: 14px;
             color: #1f2937;
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -404,7 +418,7 @@
             margin-bottom: 12px;
             color: white;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             position: relative;
             overflow: hidden;
             text-decoration: none;
@@ -431,33 +445,33 @@
         }
         
         .btn.primary { 
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
         }
         .btn.success { 
-            background: linear-gradient(135deg, #6ee7b7, #34d399);
+            background: linear-gradient(135deg, #10B981, #059669);
         }
         .btn.info { 
-            background: linear-gradient(135deg, #7dd3fc, #38bdf8);
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
         }
         .btn.danger { 
-            background: linear-gradient(135deg, #fda4af, #fb7185);
+            background: linear-gradient(135deg, #f093fb, #f5576c);
         }
         .btn.secondary { 
-            background: rgba(243,244,246,0.95);
+            background: rgba(243,244,246,0.9);
             color: #1F2937;
             box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
         .btn.cloud { 
-            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            background: linear-gradient(135deg, #8B5CF6, #7C3AED);
         }
         .btn.warning { 
-            background: linear-gradient(135deg, #fcd34d, #fbbf24);
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
         }
         .btn.print { 
-            background: linear-gradient(135deg, #93c5fd, #60a5fa);
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
         }
         .btn.usb { 
-            background: linear-gradient(135deg, #f9a8d4, #f472b6);
+            background: linear-gradient(135deg, #f472b6, #ec4899);
         }
         
         .btn:disabled { 
@@ -469,25 +483,25 @@
         }
         .btn:hover:not(:disabled) {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
         
         input[type="text"], textarea, select {
             width: 100%;
             padding: 14px;
-            border: 2px solid rgba(94,234,212,0.25);
+            border: 2px solid rgba(102,126,234,0.15);
             border-radius: 12px;
             font-size: 15px;
             margin-bottom: 12px;
             transition: all 0.3s ease;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.7);
         }
         
         input[type="text"]:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #5eead4;
-            box-shadow: 0 0 0 4px rgba(94,234,212,0.15);
-            background: white;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102,126,234,0.1);
+            background: rgba(255,255,255,0.95);
             transform: translateY(-2px);
         }
         
@@ -504,8 +518,8 @@
         }
         
         .preview {
-            background: linear-gradient(135deg, rgba(94,234,212,0.08), rgba(165,243,252,0.08));
-            border: 3px dashed #5eead4;
+            background: linear-gradient(135deg, rgba(102,126,234,0.05), rgba(246,147,251,0.05));
+            border: 3px dashed #667eea;
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 16px;
@@ -522,7 +536,7 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(94,234,212,0.12) 10%, transparent 10%);
+            background: radial-gradient(circle, rgba(102,126,234,0.1) 10%, transparent 10%);
             background-size: 20px 20px;
             animation: movePreview 15s linear infinite;
         }
@@ -553,16 +567,17 @@
         
         .label:hover {
             transform: scale(1.05);
-            box-shadow: 0 15px 50px rgba(94,234,212,0.3);
+            box-shadow: 0 15px 50px rgba(102,126,234,0.25);
         }
         
         .controls {
-            background: linear-gradient(to bottom, rgba(249,250,251,0.95), rgba(243,244,246,0.95));
-            backdrop-filter: blur(10px);
+            background: linear-gradient(to bottom, rgba(249,250,251,0.8), rgba(243,244,246,0.8));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 16px;
-            border: 1px solid rgba(255,255,255,0.5);
+            border: 0.5px solid rgba(255,255,255,0.5);
         }
         
         .control {
@@ -583,13 +598,13 @@
         }
         
         .control-value {
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             padding: 5px 14px;
             border-radius: 20px;
             font-size: 13px;
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(94,234,212,0.3);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
             animation: bounce 1s ease infinite;
         }
         
@@ -602,7 +617,7 @@
             width: 100%;
             height: 10px;
             -webkit-appearance: none;
-            background: linear-gradient(to right, #5eead4, #2dd4bf, #14b8a6);
+            background: linear-gradient(to right, #667eea, #764ba2, #f093fb);
             border-radius: 10px;
             outline: none;
             position: relative;
@@ -629,33 +644,33 @@
             -webkit-appearance: none;
             width: 28px;
             height: 28px;
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(94,234,212,0.5);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
             border: 3px solid white;
             transition: all 0.3s ease;
         }
         
         .slider::-webkit-slider-thumb:hover {
             transform: scale(1.2);
-            box-shadow: 0 6px 20px rgba(94,234,212,0.6);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.5);
         }
         
         .slider::-moz-range-thumb {
             width: 28px;
             height: 28px;
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             border-radius: 50%;
             cursor: pointer;
             border: 3px solid white;
-            box-shadow: 0 4px 15px rgba(94,234,212,0.5);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.4);
             transition: all 0.3s ease;
         }
         
         .slider::-moz-range-thumb:hover {
             transform: scale(1.2);
-            box-shadow: 0 6px 20px rgba(94,234,212,0.6);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.5);
         }
         
         .toggle {
@@ -666,8 +681,8 @@
         .toggle button {
             flex: 1;
             padding: 14px;
-            border: 2px solid rgba(94,234,212,0.25);
-            background: rgba(255,255,255,0.9);
+            border: 2px solid rgba(102,126,234,0.15);
+            background: rgba(255,255,255,0.7);
             border-radius: 12px;
             font-size: 14px;
             font-weight: 700;
@@ -677,10 +692,10 @@
         }
         
         .toggle button.active {
-            border-color: #5eead4;
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            box-shadow: 0 6px 20px rgba(94,234,212,0.4);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.3);
             transform: scale(1.05);
         }
         
@@ -710,6 +725,7 @@
             right: 16px;
             background: rgba(31,41,55,0.95);
             backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             color: white;
             padding: 16px;
             border-radius: 16px;
@@ -734,7 +750,7 @@
             background: linear-gradient(135deg, rgba(16,185,129,0.95), rgba(5,150,105,0.95));
         }
         .toast.error { 
-            background: linear-gradient(135deg, rgba(251,113,133,0.95), rgba(244,63,94,0.95));
+            background: linear-gradient(135deg, rgba(245,87,108,0.95), rgba(239,68,68,0.95));
         }
         
         .cloud-status {
@@ -745,9 +761,10 @@
             font-weight: 700;
             color: #1f2937;
             padding: 14px;
-            background: linear-gradient(135deg, rgba(207,250,254,0.8), rgba(165,243,252,0.8));
-            backdrop-filter: blur(10px);
-            border: 2px solid #5eead4;
+            background: linear-gradient(135deg, rgba(219,234,254,0.7), rgba(191,219,254,0.7));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(59,130,246,0.3);
             border-radius: 12px;
             margin-bottom: 12px;
         }
@@ -769,9 +786,10 @@
         }
 
         .info-box {
-            background: linear-gradient(135deg, rgba(254,249,195,0.8), rgba(253,230,138,0.8));
-            backdrop-filter: blur(10px);
-            border: 2px solid #fcd34d;
+            background: linear-gradient(135deg, rgba(254,243,199,0.7), rgba(253,230,138,0.7));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(251,191,36,0.3);
             border-radius: 12px;
             padding: 14px;
             margin-bottom: 12px;
@@ -781,9 +799,10 @@
         }
 
         .usb-info {
-            background: linear-gradient(135deg, rgba(251,207,232,0.8), rgba(249,168,212,0.8));
-            backdrop-filter: blur(10px);
-            border: 2px solid #f9a8d4;
+            background: linear-gradient(135deg, rgba(251,207,232,0.7), rgba(249,168,212,0.7));
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(236,72,153,0.3);
             border-radius: 12px;
             padding: 14px;
             margin-bottom: 12px;
@@ -797,19 +816,20 @@
             border-radius: 12px;
             margin-bottom: 12px;
             font-weight: 700;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         .usb-status.connected {
-            background: linear-gradient(135deg, rgba(209,250,229,0.8), rgba(167,243,208,0.8));
+            background: linear-gradient(135deg, rgba(209,250,229,0.7), rgba(167,243,208,0.7));
             color: #065F46;
-            border: 2px solid #6ee7b7;
+            border: 0.5px solid rgba(16,185,129,0.3);
         }
 
         .usb-status.disconnected {
-            background: linear-gradient(135deg, rgba(254,226,226,0.8), rgba(254,202,202,0.8));
+            background: linear-gradient(135deg, rgba(254,226,226,0.7), rgba(254,202,202,0.7));
             color: #991B1B;
-            border: 2px solid #fda4af;
+            border: 0.5px solid rgba(239,68,68,0.3);
         }
 
         .selection-bar {
@@ -817,14 +837,15 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(30px);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
             padding: 14px 16px;
-            box-shadow: 0 -8px 32px rgba(0,0,0,0.15);
+            box-shadow: 0 -8px 32px rgba(0,0,0,0.1);
             display: none;
             gap: 10px;
             z-index: 101;
-            border-top: 1px solid rgba(255,255,255,0.3);
+            border-top: 0.5px solid rgba(255,255,255,0.3);
         }
 
         .selection-bar.visible {
@@ -838,7 +859,7 @@
             align-items: center;
             gap: 10px;
             font-weight: 800;
-            background: linear-gradient(135deg, #5eead4, #14b8a6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -858,36 +879,36 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
         }
 
         .selection-actions button:hover {
             transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.18);
         }
 
         .selection-actions .btn-usb {
-            background: linear-gradient(135deg, #f9a8d4, #f472b6);
+            background: linear-gradient(135deg, #f472b6, #ec4899);
             color: white;
         }
 
         .selection-actions .btn-pdf {
-            background: linear-gradient(135deg, #fda4af, #fb7185);
+            background: linear-gradient(135deg, #f093fb, #f5576c);
             color: white;
         }
 
         .selection-actions .btn-png {
-            background: linear-gradient(135deg, #6ee7b7, #34d399);
+            background: linear-gradient(135deg, #10B981, #059669);
             color: white;
         }
 
         .selection-actions .btn-print {
-            background: linear-gradient(135deg, #93c5fd, #60a5fa);
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
             color: white;
         }
 
         .selection-actions .btn-clear {
-            background: rgba(243,244,246,0.95);
+            background: rgba(243,244,246,0.9);
             color: #1F2937;
             min-width: 44px;
         }
@@ -1160,22 +1181,14 @@ L=50м"></textarea>
         function autoFillFromShield(groupName) {
             if (!groupName) return '';
             
-            // Примеры: "1РП3-Гр.-3.1" -> "от 1РП3"
-            // "ЩР-1-1" -> "от ЩР-1"
-            // "1РП3-ЩО-0.1" -> "от 1РП3"
-            
             const parts = groupName.split('-');
             if (parts.length === 0) return '';
             
-            // Берём первую часть
             let shieldName = parts[0];
             
-            // Если есть вторая часть и она не начинается с цифры, добавляем её
             if (parts.length > 1) {
                 const secondPart = parts[1];
-                // Проверяем, является ли вторая часть числом
                 if (!/^\d+$/.test(secondPart)) {
-                    // Это не просто число, значит это часть имени
                     shieldName += '-' + secondPart;
                 }
             }
@@ -1433,7 +1446,6 @@ L=50м"></textarea>
             document.getElementById('l2').value = l.line2 || l.label || '';
             document.getElementById('l3').value = l.line3 || l.reference || '';
             
-            // Автозаполнение "От щита" если пустое
             if (!l.line4 || l.line4.trim() === '') {
                 l.line4 = autoFillFromShield(groupName);
             }
@@ -1451,12 +1463,10 @@ L=50м"></textarea>
             updatePreview();
         }
         
-        // Автообновление поля "От щита" при изменении группы
         document.getElementById('l1').addEventListener('input', function() {
             const groupName = this.value;
             const l4Input = document.getElementById('l4');
             
-            // Автозаполняем только если поле пустое или содержит старое автозначение
             if (!l4Input.value || l4Input.value.startsWith('от ')) {
                 l4Input.value = autoFillFromShield(groupName);
             }
@@ -1491,8 +1501,7 @@ L=50м"></textarea>
             document.getElementById('v4').textContent = pt + 'мм';
         }
 
-        // ====== USB ПЕЧАТЬ КАРТИНКОЙ ======
-        
+        // USB, PNG, PDF и остальные функции остаются без изменений
         async function connectUSB() {
             if (!navigator.usb) {
                 toast('❌ WebUSB не поддерживается! Используй Chrome/Edge', 'error');
@@ -1593,8 +1602,6 @@ L=50м"></textarea>
                 }
                 
                 const data = new Uint8Array(cmdBytes);
-                console.log('Отправка:', data.length, 'байт');
-                
                 await usbDevice.transferOut(usbEndpoint, data);
                 
                 toast('⚡ Отправлено на принтер!', 'success');
@@ -1710,8 +1717,6 @@ L=50м"></textarea>
                 toast('❌ Ошибка печати: ' + error.message, 'error');
             }
         }
-
-        // ====== PNG/PDF ЭКСПОРТ ======
 
         async function exportPNG() {
             if (idx < 0) return;
