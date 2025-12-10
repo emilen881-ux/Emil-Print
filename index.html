@@ -16,7 +16,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 50%, #7dd3fc 100%);
+            background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 50%, #0ea5e9 100%);
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
@@ -700,7 +700,7 @@
         .empty {
             text-align: center;
             padding: 60px 20px;
-            color: #475569;
+            color: white;
             font-size: 16px;
         }
         
@@ -985,7 +985,7 @@
                 <input type="text" id="l1" placeholder="Группа">
                 <input type="text" id="l2" placeholder="Описание">
                 <input type="text" id="l3" placeholder="Кабель">
-                <input type="text" id="l4" placeholder="От щита (заполняется автоматически)">
+                <input type="text" id="l4" placeholder="От щита (заполняется автоматически)" readonly style="background: rgba(240,240,240,0.9);">
                 <input type="text" id="l5" placeholder="Длина">
             </div>
         </div>
@@ -1169,6 +1169,7 @@ L=50м"></textarea>
         let usbDevice = null;
         let usbEndpoint = null;
         
+        // АВТОЗАПОЛНЕНИЕ "От щита" из группы
         function autoFillFromShield(groupName) {
             if (!groupName) return '';
             
@@ -1437,6 +1438,7 @@ L=50м"></textarea>
             document.getElementById('l2').value = l.line2 || l.label || '';
             document.getElementById('l3').value = l.line3 || l.reference || '';
             
+            // АВТОЗАПОЛНЕНИЕ при открытии и обновлении
             if (!l.line4 || l.line4.trim() === '') {
                 l.line4 = autoFillFromShield(groupName);
             }
@@ -1454,13 +1456,13 @@ L=50м"></textarea>
             updatePreview();
         }
         
+        // АВТООБНОВЛЕНИЕ при изменении группы
         document.getElementById('l1').addEventListener('input', function() {
             const groupName = this.value;
             const l4Input = document.getElementById('l4');
             
-            if (!l4Input.value || l4Input.value.startsWith('от ')) {
-                l4Input.value = autoFillFromShield(groupName);
-            }
+            // Автозаполняем "От щита"
+            l4Input.value = autoFillFromShield(groupName);
             
             updatePreview();
         });
@@ -1492,6 +1494,7 @@ L=50м"></textarea>
             document.getElementById('v4').textContent = pt + 'мм';
         }
 
+        // Остальные функции (USB, PNG, PDF, печать, импорт) остаются без изменений - скрипт слишком длинный, но логика та же
         async function connectUSB() {
             if (!navigator.usb) {
                 toast('❌ WebUSB не поддерживается! Используй Chrome/Edge', 'error');
@@ -2003,7 +2006,9 @@ L=50м"></textarea>
         });
 
         document.querySelectorAll('input[type="text"]').forEach(input => {
-            input.addEventListener('input', updatePreview);
+            if (input.id !== 'l4') { // Не слушаем l4, т.к. он readonly
+                input.addEventListener('input', updatePreview);
+            }
         });
 
         document.getElementById('saveBtn').addEventListener('click', function() {
@@ -2045,5 +2050,3 @@ L=50м"></textarea>
     </script>
 </body>
 </html>
-
-
